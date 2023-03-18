@@ -1,0 +1,13 @@
+.link {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 9px;
+    text-decoration: none;
+    color: var(--text-active-color);
+}
+
+.link:hover {
+    opacity: 0.7;
+}
