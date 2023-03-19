@@ -21,7 +21,7 @@ function Ingridient({ ingridient }) {
 }
 
 Ingridient.propTypes = {
-  ingridient: propTypes.object,
+  ingridient: propTypes.object.isRequired,
 }
 
 export default Ingridient;

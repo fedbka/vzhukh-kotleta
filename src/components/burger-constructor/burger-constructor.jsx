@@ -6,6 +6,7 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-constructor.module.css";
+import propTypes from "prop-types";
 
 function BurgerConstructor({ ingridients }) {
   const bunIngridient = ingridients.find(
@@ -27,33 +28,33 @@ function BurgerConstructor({ ingridients }) {
       {bunIngridient && (
         <ConstructorElement
           type="top"
-          text={bunIngridient.name}
+          text={`${bunIngridient.name} (верх)`}
           price={bunIngridient.price}
           isLocked={true}
           thumbnail={bunIngridient.image}
-          extraClass="mt-4 mb-4"
+          extraClass="mr-1 mt-4 mb-4"
         />
       )}
       <ul className={styles.filling_ingridients}>
         {otherIngridients.map((ingridient, index) => (
-          <>
+          <li key={ingridient._id} className={styles.filling_ingridients_item}>
             <DragIcon />
             <ConstructorElement
               text={ingridient.name}
               price={ingridient.price}
               thumbnail={ingridient.image}
             />
-          </>
+          </li>
         ))}
       </ul>
       {bunIngridient && (
         <ConstructorElement
           type="bottom"
-          text={bunIngridient.name}
+          text={`${bunIngridient.name} (низ)`}
           price={bunIngridient.price}
           isLocked={true}
           thumbnail={bunIngridient.image}
-          extraClass="mt-4 mb-4"
+          extraClass="mr-1 mt-4 mb-4"
         />
       )}
       <div className={styles.accept_order}>
@@ -67,6 +68,10 @@ function BurgerConstructor({ ingridients }) {
       </div>
     </section>
   );
+}
+
+BurgerConstructor.propTypes = {
+  ingridients: propTypes.array.isRequired,  
 }
 
 export default BurgerConstructor;

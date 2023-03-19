@@ -16,7 +16,7 @@ function IngridientList({ ingridients }) {
 }
 
 IngridientList.propTypes = {
-  ingridients: propTypes.array,
+  ingridients: propTypes.array.isRequired,
 };
 
 export default IngridientList;

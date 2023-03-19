@@ -13,7 +13,6 @@ function App() {
         <BurgerIngredients ingridients={ingridients} ingridientsTypes={ingridientsTypes}/>
         <BurgerConstructor ingridients={ingridients}/>
       </main>
-      <footer></footer>
     </div>
   );
 }
