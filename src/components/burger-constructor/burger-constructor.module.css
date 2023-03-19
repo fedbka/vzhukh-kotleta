@@ -1,0 +1,41 @@
+.component {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    width: 100%;
+}
+
+.filling_ingridients {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 16px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-y: scroll;
+    height: 40vh;
+}
+
+.filling_ingridients::-webkit-scrollbar {
+    width: 8px;
+}
+
+.filling_ingridients::-webkit-scrollbar-thumb {
+    background-color: #8585ad;
+}
+
+.accept_order {
+    display: flex;
+    justify-content: end;
+    flex-direction: row;
+    gap: 40px;
+}
+.totals {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 9.5px;
+}

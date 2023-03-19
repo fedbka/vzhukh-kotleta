@@ -8,7 +8,7 @@ function NavigationLink({ Icon, text, link = "#", active = false }) {
       <Icon type={active ? "primary" : "secondary"} />
       <p
         className={
-          "text text_type_main-default" + (!active && " text_color_inactive")
+          "text text_type_main-default " + (!active ? "text_color_inactive" : "")
         }
       >
         {text}

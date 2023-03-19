@@ -1,4 +1,4 @@
-const data = [
+export const ingridients = [
     {
         "_id": "60666c42cc7b410027a1a9b1",
         "name": "Краторная булка N-200i",
@@ -211,4 +211,4 @@ const data = [
     }
 ];
 
-export default data;
+export const ingridientsTypes = [{ id: 'bun', name: 'Булки' }, { id: 'sauce', name: 'Соусы' }, { id: 'main', name: 'Начинки' }];
