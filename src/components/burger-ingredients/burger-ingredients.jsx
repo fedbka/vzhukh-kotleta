@@ -20,8 +20,6 @@ function BurgerIngredients({ ingridients, ingridientsTypes }) {
     setShowModal(true);
   };
 
-  console.log('I was rendered');
-
   return (
     <>
       {showModal && (
