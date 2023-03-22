@@ -1,0 +1,41 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    min-width: 640px;
+    min-height: 64px;
+}
+
+.image {
+    min-height: 240px;
+    height: 240px;
+    width: 480px;
+    margin: 0;
+    padding: 0;
+}
+
+.name {
+    min-width: 520px;
+    min-height: 30px;
+}
+
+.composition {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.composition_item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

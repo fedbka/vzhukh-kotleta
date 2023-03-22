@@ -15,10 +15,10 @@ function AppHeader() {
         <NavigationLink Icon={BurgerIcon} text="Конструктор" active={true} />
         <NavigationLink Icon={ListIcon} text="Лента заказов" />
       </nav>
-      <nav className={styles.nav_logo}>
+      <nav className={styles.nav_type_logo}>
         <NavigationLink Icon={Logo} text="" link="#" />
       </nav>
-      <nav className={styles.nav}>
+      <nav className={`${styles.nav}`}>
         <NavigationLink Icon={ProfileIcon} text="Личный кабинет" />
       </nav>
     </header>

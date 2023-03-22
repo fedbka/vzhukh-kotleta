@@ -1,0 +1,10 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.order_number {
+    min-width: 520px;
+}

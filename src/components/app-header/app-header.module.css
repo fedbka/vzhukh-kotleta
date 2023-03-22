@@ -20,3 +20,8 @@
 .nav_type_logo {
     min-width: 289px;
 }
+
+.nav_type_right {
+    justify-content: stretch;
+
+}
