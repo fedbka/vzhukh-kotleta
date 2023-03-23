@@ -10,7 +10,6 @@ import styles from "./burger-constructor.module.css";
 import propTypes from "prop-types";
 import Modal from "../modal/modal";
 
-const modalRoot = document.getElementById("modal");
 function BurgerConstructor({ ingridients }) {
   const [orderSumm, setOrderSumm] = React.useState(0);
   const [showModal, setShowModal] = React.useState(false);
@@ -41,7 +40,7 @@ function BurgerConstructor({ ingridients }) {
   return (
     <>
       {showModal && (
-        <Modal handlerOnClose={() => setShowModal(false)} modalRoot={modalRoot}>
+        <Modal handlerOnClose={() => setShowModal(false)}>
           <OrderDetails />
         </Modal>
       )}

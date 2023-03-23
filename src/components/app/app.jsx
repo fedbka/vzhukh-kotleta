@@ -3,15 +3,15 @@ import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
-import IngridientsApi from "../../utils/ingridients-api";
+import ingridientsApi from "../../utils/ingridients-api";
 
 const ingridientsTypes = [
   { id: "bun", name: "Булки" },
   { id: "sauce", name: "Соусы" },
   { id: "main", name: "Начинки" },
 ];
-const baseUrl = "https://norma.nomoreparties.space/api";
-const ingridientsApi = new IngridientsApi(baseUrl);
+
+
 
 function App() {
   const [threreIsAError, setError] = React.useState(false);

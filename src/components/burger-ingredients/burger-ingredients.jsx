@@ -5,8 +5,6 @@ import styles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import propTypes from "prop-types";
-
-const modalRoot = document.getElementById("modal");
 function BurgerIngredients({ ingridients, ingridientsTypes }) {
   const [currentTypeId, setCurrentTypeId] = React.useState(
     ingridientsTypes && ingridientsTypes[0] ? ingridientsTypes[0].id : ""
@@ -23,7 +21,7 @@ function BurgerIngredients({ ingridients, ingridientsTypes }) {
   return (
     <>
       {showModal && (
-        <Modal handlerOnClose={() => setShowModal(false)} modalRoot={modalRoot}>
+        <Modal handlerOnClose={() => setShowModal(false)}>
           <IngridientDetails ingridient={chosedIngridient} />
         </Modal>
       )}

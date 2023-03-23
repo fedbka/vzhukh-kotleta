@@ -5,8 +5,8 @@ import ModalOverlay from "../modal-overlay/modal-overlay";
 import ReactDOM from "react-dom";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
-
-function Modal({ handlerOnClose, modalRoot, children }) {
+const modalRoot = document.getElementById("modal");
+function Modal({ handlerOnClose, children }) {
 
     useEffect(() => {
         const handlerOnPressEsc = (event) => event.key === 'Escape' && handlerOnClose();
@@ -18,7 +18,7 @@ function Modal({ handlerOnClose, modalRoot, children }) {
 
     return ReactDOM.createPortal((
         <ModalOverlay onClick={handlerOnClose}>
-            <div className={styles.content}>
+            <div className={styles.content} onClick={(e) => e.stopPropagation()}>
                 {children}
                 <div className={styles.closeButton}>
                     <CloseIcon onClick={handlerOnClose} />
@@ -29,7 +29,8 @@ function Modal({ handlerOnClose, modalRoot, children }) {
 }
 
 Modal.propTypes = {
-
+    handlerOnClose: propTypes.func.isRequired,
+    children: propTypes.object,
 }
 
 export default Modal;

@@ -1,4 +1,5 @@
-export default class IngridientsApi {
+const baseUrl = "https://norma.nomoreparties.space/api";
+class IngridientsApi {
     
     constructor(baseUrl, authorizationToken = '') {
 
@@ -13,7 +14,7 @@ export default class IngridientsApi {
         }
     }
 
-    _request = (request, method = 'GET', body = '') => {
+    _request = (endpoint, method = 'GET', body = '') => {
     
         const params = {
             'method': method,
@@ -22,7 +23,7 @@ export default class IngridientsApi {
         
         if (method !== 'GET' && body) params.body = JSON.stringify(body);
 
-        return fetch(`${this._config.baseUrl}/${request}`, params)
+        return fetch(`${this._config.baseUrl}/${endpoint}`, params)
             .then(res => {
                 if (res.ok) return res.json();
                 return Promise.reject(res);
@@ -32,3 +33,7 @@ export default class IngridientsApi {
     getIngridients = () => this._request('ingredients');
     
 }
+
+const ingridientsApi = new IngridientsApi(baseUrl);
+
+export default ingridientsApi;
