@@ -16,7 +16,7 @@
     padding: 0;
     list-style: none;
     overflow-y: scroll;
-    height: 40vh;
+    height: 75vh;
 }
 
 .filling_ingridients::-webkit-scrollbar {
@@ -30,7 +30,7 @@
 .filling_ingridients_item {
     display: flex;
     flex-direction: row;
-    gap: 8px;
+    gap: 10px;
     justify-content: flex-start;
     align-items: center;
 }
@@ -39,8 +39,10 @@
     display: flex;
     justify-content: end;
     flex-direction: row;
+    width: 100%;
     gap: 40px;
 }
+
 .totals {
     display: flex;
     flex-direction: row;

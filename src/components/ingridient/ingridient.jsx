@@ -4,10 +4,10 @@ import styles from "./ingridient.module.css";
 import propTypes from "prop-types";
 
 
-function Ingridient({ ingridient }) {
+function Ingridient({ ingridient, ingridientOnClick }) {
   return (
-    <div className={styles.card}>
-      <Counter count={1} extraClass="m-1"/>
+    <div className={styles.card} onClick={() => ingridientOnClick(ingridient)}>
+      <Counter count={1}/>
       <img className={styles.image} src={ingridient.image} alt={ingridient.name} />
       <div className={`${styles.price} pt-2 pb-2`}>
         <span className="text text_type_main-medium">{ingridient.price}</span>
@@ -22,6 +22,7 @@ function Ingridient({ ingridient }) {
 
 Ingridient.propTypes = {
   ingridient: propTypes.object.isRequired,
+  ingridientOnClick: propTypes.func,
 }
 
 export default Ingridient;
