@@ -3,7 +3,8 @@ import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
-import ingridientsApi from "../../utils/ingridients-api";
+import Api from "../../utils/api";
+import { IngridientsContext } from "../../utils/app-context";
 
 const ingridientsTypes = [
   { id: "bun", name: "Булки" },
@@ -11,15 +12,12 @@ const ingridientsTypes = [
   { id: "main", name: "Начинки" },
 ];
 
-
-
 function App() {
   const [threreIsAError, setError] = React.useState(false);
   const [ingridients, setIngiridients] = React.useState([]);
 
   React.useEffect(() => {
-    ingridientsApi
-      .getIngridients()
+    Api.getIngridients()
       .then((response) => setIngiridients(response.data))
       .catch((err) => {
         setError(true);
@@ -44,13 +42,14 @@ function App() {
             </p>
           </div>
         )}
-        {!threreIsAError && (
-          <BurgerIngredients
-            ingridients={ingridients}
-            ingridientsTypes={ingridientsTypes}
-          />
-        )}
-        {!threreIsAError && <BurgerConstructor ingridients={ingridients} />}
+        <IngridientsContext.Provider value={{ ingridients, setIngiridients }}>
+          {!threreIsAError && (
+            <>
+              <BurgerIngredients ingridientsTypes={ingridientsTypes} />
+              <BurgerConstructor />
+            </>
+          )}
+        </IngridientsContext.Provider>
       </main>
     </div>
   );

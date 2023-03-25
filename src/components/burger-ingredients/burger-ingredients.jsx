@@ -5,11 +5,12 @@ import styles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import propTypes from "prop-types";
-function BurgerIngredients({ ingridients, ingridientsTypes }) {
+import { IngridientsContext } from "../../utils/app-context";
+function BurgerIngredients({ ingridientsTypes }) {
   const [currentTypeId, setCurrentTypeId] = React.useState(
     ingridientsTypes && ingridientsTypes[0] ? ingridientsTypes[0].id : ""
   );
-
+  const { ingridients } = React.useContext(IngridientsContext);
   const [showModal, setShowModal] = React.useState(false);
   const [chosedIngridient, setChosenIngridient] = React.useState({});
 
@@ -63,7 +64,6 @@ function BurgerIngredients({ ingridients, ingridientsTypes }) {
 }
 
 BurgerIngredients.propTypes = {
-  ingridients: propTypes.array.isRequired,
   ingridientsTypes: propTypes.array.isRequired,
 };
 

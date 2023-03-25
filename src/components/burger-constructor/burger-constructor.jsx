@@ -7,16 +7,42 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import OrderDetails from "../order-details/order-details";
 import styles from "./burger-constructor.module.css";
-import propTypes from "prop-types";
 import Modal from "../modal/modal";
+import {
+  IngridientsContext,
+  OrderContext,
+  orderDataInitialState,
+} from "../../utils/app-context";
+import Api from "../../utils/api";
 
-function BurgerConstructor({ ingridients }) {
+function BurgerConstructor() {
   const [orderSumm, setOrderSumm] = React.useState(0);
   const [showModal, setShowModal] = React.useState(false);
+  const [orderData, setOrderData] = React.useState(orderDataInitialState);
 
-  const acceptOrder = () => {
+  const placeOrder = () => {
     setShowModal(true);
+    Api.getOrderDetails({
+      ingredients: [
+        bunIngridient._id,
+        ...otherIngridients.map((ingridient) => ingridient._id),
+        bunIngridient._id,
+      ],
+    })
+      .then((response) =>
+        setOrderData({
+          name: response.name,
+          number: response.order.number,
+        })
+      )
+      .catch((err) => console.log(err.json()));
   };
+
+  const handlerCloseModal = () => {
+    setShowModal(false);
+    setOrderData(orderDataInitialState);
+  };
+  const { ingridients } = React.useContext(IngridientsContext);
 
   const bunIngridient =
     ingridients && ingridients.find((ingridient) => ingridient.type === "bun");
@@ -31,7 +57,7 @@ function BurgerConstructor({ ingridients }) {
         ? otherIngridients.reduce((prev, ingridient) => {
             return prev + ingridient.price;
           }, 0)
-        : 0) + (bunIngridient ? bunIngridient.price : 0)
+        : 0) + (bunIngridient ? bunIngridient.price * 2 : 0)
     );
   }
 
@@ -40,9 +66,11 @@ function BurgerConstructor({ ingridients }) {
   return (
     <>
       {showModal && (
-        <Modal handlerOnClose={() => setShowModal(false)}>
-          <OrderDetails />
-        </Modal>
+        <OrderContext.Provider value={{ orderData, setOrderData }}>
+          <Modal handlerOnClose={handlerCloseModal}>
+            <OrderDetails />
+          </Modal>
+        </OrderContext.Provider>
       )}
       <section className={styles.component}>
         {bunIngridient && (
@@ -86,7 +114,12 @@ function BurgerConstructor({ ingridients }) {
             <span className="text text_type_digits-medium">{orderSumm}</span>
             <CurrencyIcon />
           </div>
-          <Button htmlType="button" type="primary" size="large" onClick={acceptOrder}>
+          <Button
+            htmlType="button"
+            type="primary"
+            size="large"
+            onClick={placeOrder}
+          >
             Оформить заказ
           </Button>
         </div>
@@ -94,9 +127,5 @@ function BurgerConstructor({ ingridients }) {
     </>
   );
 }
-
-BurgerConstructor.propTypes = {
-  ingridients: propTypes.array.isRequired,
-};
 
 export default BurgerConstructor;
