@@ -1,4 +1,5 @@
 const baseUrl = "https://norma.nomoreparties.space/api";
+
 class IngridientsApi {
     
     constructor(baseUrl, authorizationToken = '') {
@@ -8,8 +9,8 @@ class IngridientsApi {
         this._config = {
             baseUrl: baseUrl,
             headers: {
-                ...( authorizationToken ? { 'authorization': authorizationToken} : {}),
-                'Content-Type': 'application/json',
+                ...( this._authorizationToken ? { 'authorization': this._authorizationToken} : {}),
+                'Content-Type': 'application/json; charset=utf-8',
             }
         }
     }
@@ -22,7 +23,7 @@ class IngridientsApi {
         }
         
         if (method !== 'GET' && body) params.body = JSON.stringify(body);
-
+    
         return fetch(`${this._config.baseUrl}/${endpoint}`, params)
             .then(res => {
                 if (res.ok) return res.json();
@@ -31,6 +32,8 @@ class IngridientsApi {
     }
     
     getIngridients = () => this._request('ingredients');
+
+    getOrderDetails = (ingridients) => this._request('orders', 'POST', ingridients);
     
 }
 
