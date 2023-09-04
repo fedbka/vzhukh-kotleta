@@ -13,7 +13,7 @@ const ingridientsTypes = [
 ];
 
 function App() {
-  const [threreIsAError, setError] = React.useState(false);
+  const [thereIsAError, setError] = React.useState(false);
   const [ingridients, setIngiridients] = React.useState([]);
 
   React.useEffect(() => {
@@ -29,7 +29,7 @@ function App() {
     <div>
       <AppHeader />
       <main className={styles.main}>
-        {threreIsAError && (
+        {thereIsAError && (
           <div>
             <p>
               Компания Vzhukh Kotleta Inc. временно приостановила работу своих
@@ -43,7 +43,7 @@ function App() {
           </div>
         )}
         <IngridientsContext.Provider value={{ ingridients, setIngiridients }}>
-          {!threreIsAError && (
+          {!thereIsAError && (
             <>
               <BurgerIngredients ingridientsTypes={ingridientsTypes} />
               <BurgerConstructor />
