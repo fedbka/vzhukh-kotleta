@@ -1,4 +1,7 @@
 import React from "react";
+import { useDrop, useDrag } from "react-dnd";
+import styles from "./burger-constructor.module.css";
+import { useSelector, useDispatch } from "react-redux";
 import {
   ConstructorElement,
   DragIcon,
@@ -6,98 +9,112 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import OrderDetails from "../order-details/order-details";
-import styles from "./burger-constructor.module.css";
 import Modal from "../modal/modal";
+import { makeOrder } from "../../services/actions/make-order";
 import {
-  IngridientsContext,
-  OrderContext,
-  orderDataInitialState,
-} from "../../utils/app-context";
-import Api from "../../utils/api";
-
+  ADD_CHOSEN_INGRIDIENT,
+  DELETE_CHOSEN_INGRIDIENT,
+} from "../../services/actions/chosen-ingridients";
+import {
+  DECREASE_INGRIDIENT_QUANTITY,
+  INCREASE_INGRIDIENT_QUANTITY,
+} from "../../services/actions/ingridients";
 function BurgerConstructor() {
-  const [orderSumm, setOrderSumm] = React.useState(0);
+  const chosenIngridients = useSelector((state) => state.chosenIngridients);
   const [showModal, setShowModal] = React.useState(false);
-  const [orderData, setOrderData] = React.useState(orderDataInitialState);
 
-  const placeOrder = () => {
+  const dispatch = useDispatch();
+
+  const makeNewOrder = () => {
     setShowModal(true);
-    Api.getOrderDetails({
-      ingredients: [
-        bunIngridient._id,
-        ...otherIngridients.map((ingridient) => ingridient._id),
-        bunIngridient._id,
-      ],
-    })
-      .then((response) =>
-        setOrderData({
-          name: response.name,
-          number: response.order.number,
-        })
-      )
-      .catch((err) => console.log(err.json()));
+    dispatch(
+      makeOrder({
+        ingredients: [
+          ...chosenIngridients.items.map((ingridient) => ingridient._id),
+        ],
+      })
+    );
   };
 
   const handlerCloseModal = () => {
     setShowModal(false);
-    setOrderData(orderDataInitialState);
   };
-  const { ingridients } = React.useContext(IngridientsContext);
 
-  const bunIngridient =
-    ingridients && ingridients.find((ingridient) => ingridient.type === "bun");
+  const bunIngridient = chosenIngridients.items.find(
+    (ingridient) => ingridient.type === "bun"
+  );
 
-  const otherIngridients =
-    ingridients &&
-    ingridients.filter((ingridient) => ingridient.type !== "bun");
+  const [, dropTarget] = useDrop({
+    accept: "ingridient",
+    drop(ingridient) {
+      dispatch({
+        type: ADD_CHOSEN_INGRIDIENT,
+        item: { ...ingridient },
+      });
+      dispatch({
+        type: INCREASE_INGRIDIENT_QUANTITY,
+        item: { ...ingridient },
+      });
+    },
+  });
 
   function getOrderSumm() {
     return (
-      (otherIngridients
-        ? otherIngridients.reduce((prev, ingridient) => {
+      (chosenIngridients.items && chosenIngridients.items.length
+        ? chosenIngridients.items.reduce((prev, ingridient) => {
             return prev + ingridient.price;
           }, 0)
-        : 0) + (bunIngridient ? bunIngridient.price * 2 : 0)
+        : 0) + (bunIngridient ? bunIngridient.price : 0)
     );
   }
 
-  React.useEffect(() => setOrderSumm(getOrderSumm()), [ingridients]);
+  function deleteChosenIgridient(ingridient, index) {
+    dispatch({
+      type: DELETE_CHOSEN_INGRIDIENT,
+      index,
+    });
+    dispatch({
+      type: DECREASE_INGRIDIENT_QUANTITY,
+      item: { ...ingridient },
+    });
+  }
 
   return (
     <>
       {showModal && (
-        <OrderContext.Provider value={{ orderData, setOrderData }}>
-          <Modal handlerOnClose={handlerCloseModal}>
-            <OrderDetails />
-          </Modal>
-        </OrderContext.Provider>
+        <Modal handlerOnClose={handlerCloseModal}>
+          <OrderDetails />
+        </Modal>
       )}
-      <section className={styles.component}>
+      <section className={styles.component} ref={dropTarget}>
         {bunIngridient && (
           <ConstructorElement
             type="top"
             text={`${bunIngridient.name} (верх)`}
             price={bunIngridient.price}
             isLocked={true}
-            thumbnail={bunIngridient.image}
+            thumbnail={bunIngridient.image_mobile}
             extraClass="ml-1 mt-25 mb-4"
           />
         )}
         <ul className={styles.filling_ingridients}>
-          {otherIngridients &&
-            otherIngridients.map((ingridient, index) => (
-              <li
-                key={ingridient._id}
-                className={styles.filling_ingridients_item}
-              >
-                <DragIcon />
-                <ConstructorElement
-                  text={ingridient.name}
-                  price={ingridient.price}
-                  thumbnail={ingridient.image}
-                />
-              </li>
-            ))}
+          {chosenIngridients.items &&
+            chosenIngridients.items.map(
+              (ingridient, index) =>
+                ingridient.type !== "bun" && (
+                  <li key={index} className={styles.filling_ingridients_item}>
+                    <DragIcon />
+                    <ConstructorElement
+                      text={ingridient.name}
+                      price={ingridient.price}
+                      thumbnail={ingridient.image_mobile}
+                      handleClose={() =>
+                        deleteChosenIgridient(ingridient, index)
+                      }
+                    />
+                  </li>
+                )
+            )}
         </ul>
         {bunIngridient && (
           <ConstructorElement
@@ -105,20 +122,23 @@ function BurgerConstructor() {
             text={`${bunIngridient.name} (низ)`}
             price={bunIngridient.price}
             isLocked={true}
-            thumbnail={bunIngridient.image}
+            thumbnail={bunIngridient.image_mobile}
             extraClass="ml-1 mt-4 mb-4"
           />
         )}
         <div className={`${styles.accept_order} mt-6 mr-15`}>
           <div className={styles.totals}>
-            <span className="text text_type_digits-medium">{orderSumm}</span>
+            <span className="text text_type_digits-medium">
+              {getOrderSumm()}
+            </span>
             <CurrencyIcon />
           </div>
           <Button
             htmlType="button"
             type="primary"
             size="large"
-            onClick={placeOrder}
+            onClick={makeNewOrder}
+            disabled={!(chosenIngridients.items.length >= 2)}
           >
             Оформить заказ
           </Button>

@@ -6,7 +6,7 @@ export default function IngridientDetails({ ingridient }) {
   return (
     <div className={styles.card}>
       <h1 className={`${styles.title} text text_type_main-large`}>Детали ингридиента</h1>
-      <img className={styles.image} src={ingridient.image} alt={ingridient.name} />
+      <img className={styles.image} src={ingridient.image_large} alt={ingridient.name} />
       <p className={`${styles.name} text text_type_main-medium mt-4 mb-4`}>{ingridient.name}</p>
       <section className={`${styles.composition} mt-4 mb-5`}>
         <div className={styles.composition_item}>
