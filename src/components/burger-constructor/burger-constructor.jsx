@@ -1,16 +1,12 @@
-import React from "react";
-import { useDrop, useDrag } from "react-dnd";
-import styles from "./burger-constructor.module.css";
-import { useSelector, useDispatch } from "react-redux";
 import {
-  ConstructorElement,
-  DragIcon,
-  CurrencyIcon,
   Button,
+  ConstructorElement,
+  CurrencyIcon,
+  DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import OrderDetails from "../order-details/order-details";
-import Modal from "../modal/modal";
-import { makeOrder } from "../../services/actions/make-order";
+import React, { useMemo } from "react";
+import { useDrop } from "react-dnd";
+import { useDispatch, useSelector } from "react-redux";
 import {
   ADD_CHOSEN_INGRIDIENT,
   DELETE_CHOSEN_INGRIDIENT,
@@ -19,8 +15,13 @@ import {
   DECREASE_INGRIDIENT_QUANTITY,
   INCREASE_INGRIDIENT_QUANTITY,
 } from "../../services/actions/ingridients";
+import { makeOrder } from "../../services/actions/make-order";
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
+import styles from "./burger-constructor.module.css";
+
 function BurgerConstructor() {
-  const chosenIngridients = useSelector((state) => state.chosenIngridients);
+  const chosenIngridients = useSelector((store) => store.chosenIngridients);
   const [showModal, setShowModal] = React.useState(false);
 
   const dispatch = useDispatch();
@@ -34,10 +35,6 @@ function BurgerConstructor() {
         ],
       })
     );
-  };
-
-  const handlerCloseModal = () => {
-    setShowModal(false);
   };
 
   const bunIngridient = chosenIngridients.items.find(
@@ -58,15 +55,18 @@ function BurgerConstructor() {
     },
   });
 
-  function getOrderSumm() {
-    return (
-      (chosenIngridients.items && chosenIngridients.items.length
+  const orderSumm = useMemo(
+    () =>
+      chosenIngridients.items && chosenIngridients.items.length
         ? chosenIngridients.items.reduce((prev, ingridient) => {
-            return prev + ingridient.price;
+            return (
+              prev + (ingridient.type === "bun" ? 2 : 1) * ingridient.price
+            );
           }, 0)
-        : 0) + (bunIngridient ? bunIngridient.price : 0)
-    );
-  }
+        : 0,
+    [chosenIngridients]
+  );
+
 
   function deleteChosenIgridient(ingridient, index) {
     dispatch({
@@ -82,7 +82,7 @@ function BurgerConstructor() {
   return (
     <>
       {showModal && (
-        <Modal handlerOnClose={handlerCloseModal}>
+        <Modal handlerOnClose={() => setShowModal(false)}>
           <OrderDetails />
         </Modal>
       )}
@@ -102,7 +102,7 @@ function BurgerConstructor() {
             chosenIngridients.items.map(
               (ingridient, index) =>
                 ingridient.type !== "bun" && (
-                  <li key={index} className={styles.filling_ingridients_item}>
+                  <li key={ingridient.uuid} className={styles.filling_ingridients_item}>
                     <DragIcon />
                     <ConstructorElement
                       text={ingridient.name}
@@ -128,9 +128,7 @@ function BurgerConstructor() {
         )}
         <div className={`${styles.accept_order} mt-6 mr-15`}>
           <div className={styles.totals}>
-            <span className="text text_type_digits-medium">
-              {getOrderSumm()}
-            </span>
+            <span className="text text_type_digits-medium">{orderSumm}</span>
             <CurrencyIcon />
           </div>
           <Button

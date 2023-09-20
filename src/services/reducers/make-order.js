@@ -7,19 +7,17 @@ import {
 const initialState = {
   description: '',
   number: null,
-  makeOrderRequest: false,
-  makeOrderFalied: false,
+  requested: false,
+  requestFailed: false,
+  requestErrorMessage: '',
 };
 
 export const orderReducer = (state = initialState, action) => {
   switch (action.type) {
     case MAKE_ORDER_REQUEST: {
       return {
-        ...state,
-        description: initialState.description,
-        number: initialState.number,
-        makeOrderRequest: true,
-        makeOrderFalied: false,
+        ...initialState,
+        requested: true,
       }
     }
     case MAKE_ORDER_SUCCESS: {
@@ -28,14 +26,14 @@ export const orderReducer = (state = initialState, action) => {
         description: action.data.description,
         number: action.data.number,
         items: action.items,
-        makeOrderRequest: false,
+        requested: false,
       }
     }
     case MAKE_ORDER_FAILED: {
       return {
         ...state,
-        makeOrderRequest: false,
-        makeOrderFalied: true,
+        requested: false,
+        requestFailed: true,
       }
     }
     default: {

@@ -26,6 +26,10 @@ export function getIngridientsTypes() {
           type: GET_INGRIDIENTS_TYPES_FAILED,
         });
       }
-    });
+    }).catch(err => {
+      dispatch({
+          type: GET_INGRIDIENTS_TYPES_FAILED,
+      })
+  });
   };
 }

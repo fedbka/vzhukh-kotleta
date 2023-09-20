@@ -16,7 +16,7 @@
     padding: 0;
     list-style: none;
     overflow-y: scroll;
-    height: 75vh;
+    height: 60vh;
 }
 
 .filling_ingridients::-webkit-scrollbar {

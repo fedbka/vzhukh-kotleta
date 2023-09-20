@@ -23,6 +23,10 @@ export function getIngridients() {
           type: GET_INGRIDIENTS_FAILED,
         });
       }
-    });
+    }).catch(err => {
+      dispatch({
+          type: GET_INGRIDIENTS_FAILED,
+      })
+  });
   };
 }

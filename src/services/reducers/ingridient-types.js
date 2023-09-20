@@ -16,10 +16,8 @@ export const ingridientsTypesReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_INGRIDIENTS_TYPES_REQUEST: {
       return {
-        ...state,
-        items: initialState.items,
+        ...initialState,
         requested: true,
-        requestFailed: false,
       }
     }
     case GET_INGRIDIENTS_TYPES_SUCCESS: {

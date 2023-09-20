@@ -41,7 +41,7 @@ export const ingridientsReducer = (state = initialState, action) => {
         ...state,
         items: [...state.items.map(item => {
           if (action.item.type === 'bun') {
-            return item._id === action.item._id ? {...item, __v : 1} : item.type === 'bun' ? {...item, __v: 0} : {...item};
+            return item._id === action.item._id ? {...item, __v : 2} : item.type === 'bun' ? {...item, __v: 0} : {...item};
           } else {
             return item._id === action.item._id ? {...item, __v : item.__v + 1} : item;
           }

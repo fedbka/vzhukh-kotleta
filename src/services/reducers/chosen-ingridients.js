@@ -1,8 +1,10 @@
 import {
   ADD_CHOSEN_INGRIDIENT,
   CHANGE_POSITION_OF_CHOSEN_INGRIDIENT,
+  CLEAR_CHOSEN_INGRIDIENTS,
   DELETE_CHOSEN_INGRIDIENT,
 } from '../actions/chosen-ingridients';
+import { v4 as uuidv4 } from 'uuid';
 
 const initialState = {
   items: [],
@@ -13,7 +15,7 @@ export const chosenIngridientsReducer = (state = initialState, action) => {
     case ADD_CHOSEN_INGRIDIENT: {
       return {
         ...state,
-        items: action.item.type !== 'bun' ? [...state.items, { ...action.item }] : [...state.items.filter(item => item.type !== 'bun'), {...action.item}],
+        items: action.item.type !== 'bun' ? [...state.items, { ...action.item, uuid:  uuidv4()}] : [...state.items.filter(item => item.type !== 'bun'), {...action.item, uuid: uuidv4()}],
       }
     }
     case DELETE_CHOSEN_INGRIDIENT: {
@@ -29,7 +31,10 @@ export const chosenIngridientsReducer = (state = initialState, action) => {
         ...state,
         items: [...newOrder],
       }
-    }    
+    }
+    case CLEAR_CHOSEN_INGRIDIENTS: {
+      return {...initialState};
+    }
     default: {
       return state;
     }
