@@ -19,23 +19,13 @@ import { makeOrder } from "../../services/actions/make-order";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import styles from "./burger-constructor.module.css";
+import DragabbleWrapper from "../dragabbleWrapper/dragabble-wrapper";
 
 function BurgerConstructor() {
   const chosenIngridients = useSelector((store) => store.chosenIngridients);
   const [showModal, setShowModal] = React.useState(false);
 
   const dispatch = useDispatch();
-
-  const makeNewOrder = () => {
-    setShowModal(true);
-    dispatch(
-      makeOrder({
-        ingredients: [
-          ...chosenIngridients.items.map((ingridient) => ingridient._id),
-        ],
-      })
-    );
-  };
 
   const bunIngridient = chosenIngridients.items.find(
     (ingridient) => ingridient.type === "bun"
@@ -57,27 +47,35 @@ function BurgerConstructor() {
 
   const orderSumm = useMemo(
     () =>
-      chosenIngridients.items && chosenIngridients.items.length
-        ? chosenIngridients.items.reduce((prev, ingridient) => {
-            return (
-              prev + (ingridient.type === "bun" ? 2 : 1) * ingridient.price
-            );
-          }, 0)
-        : 0,
+      chosenIngridients.items.reduce(
+        (prev, ingridient) =>
+          prev + (ingridient.type === "bun" ? 2 : 1) * ingridient.price,
+        0
+      ),
     [chosenIngridients]
   );
 
-
-  function deleteChosenIgridient(ingridient, index) {
+  const deleteChosenIgridient = function (ingridient) {
     dispatch({
       type: DELETE_CHOSEN_INGRIDIENT,
-      index,
+      item: { ...ingridient },
     });
     dispatch({
       type: DECREASE_INGRIDIENT_QUANTITY,
       item: { ...ingridient },
     });
-  }
+  };
+
+  const makeNewOrder = () => {
+    setShowModal(true);
+    dispatch(
+      makeOrder({
+        ingredients: [
+          ...chosenIngridients.items.map((ingridient) => ingridient._id),
+        ],
+      })
+    );
+  };
 
   return (
     <>
@@ -98,23 +96,23 @@ function BurgerConstructor() {
           />
         )}
         <ul className={styles.filling_ingridients}>
-          {chosenIngridients.items &&
-            chosenIngridients.items.map(
-              (ingridient, index) =>
-                ingridient.type !== "bun" && (
-                  <li key={ingridient.uuid} className={styles.filling_ingridients_item}>
-                    <DragIcon />
-                    <ConstructorElement
-                      text={ingridient.name}
-                      price={ingridient.price}
-                      thumbnail={ingridient.image_mobile}
-                      handleClose={() =>
-                        deleteChosenIgridient(ingridient, index)
-                      }
-                    />
-                  </li>
-                )
-            )}
+          {chosenIngridients.items
+            .filter((ingridient) => ingridient.type !== "bun")
+            .map((ingridient) => (
+              <DragabbleWrapper item={ingridient} key={ingridient.uuid}>
+                <li
+                  className={styles.filling_ingridients_item}
+                >
+                  <DragIcon />
+                  <ConstructorElement
+                    text={ingridient.name}
+                    price={ingridient.price}
+                    thumbnail={ingridient.image_mobile}
+                    handleClose={() => deleteChosenIgridient(ingridient)}
+                  />
+                </li>
+              </DragabbleWrapper>
+            ))}
         </ul>
         {bunIngridient && (
           <ConstructorElement

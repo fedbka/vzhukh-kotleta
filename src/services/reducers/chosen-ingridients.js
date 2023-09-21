@@ -15,25 +15,29 @@ export const chosenIngridientsReducer = (state = initialState, action) => {
     case ADD_CHOSEN_INGRIDIENT: {
       return {
         ...state,
-        items: action.item.type !== 'bun' ? [...state.items, { ...action.item, uuid:  uuidv4()}] : [...state.items.filter(item => item.type !== 'bun'), {...action.item, uuid: uuidv4()}],
+        items: action.item.type !== 'bun' ? [...state.items, { ...action.item, uuid: uuidv4() }] : [...state.items.filter(item => item.type !== 'bun'), { ...action.item, uuid: uuidv4() }],
       }
     }
     case DELETE_CHOSEN_INGRIDIENT: {
       return {
         ...state,
-        items: [...state.items.filter((item, index) => index !== action.index)],
+        items: [...state.items.filter(item => item.uuid !== action.item.uuid)],
       }
     }
     case CHANGE_POSITION_OF_CHOSEN_INGRIDIENT: {
-      const newOrder = {...state.items};
-      [newOrder[action.dragSourceIndex], newOrder[action.dragTargetIndex]] = [newOrder[action.dragTargetIndex], newOrder[action.dragSourceIndex]]; 
+      let targetindex = null;
+      const newOrder = [...state.items.filter((item, index) => {
+        if (item.uuid === action.target.uuid) {targetindex = index};
+        return item.uuid !== action.source.uuid;
+      })];
+      newOrder.splice(targetindex, 0, {...action.source});
       return {
         ...state,
         items: [...newOrder],
       }
     }
     case CLEAR_CHOSEN_INGRIDIENTS: {
-      return {...initialState};
+      return { ...initialState };
     }
     default: {
       return state;
