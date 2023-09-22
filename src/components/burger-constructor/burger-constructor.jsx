@@ -20,6 +20,7 @@ import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import styles from "./burger-constructor.module.css";
 import DragabbleWrapper from "../dragabbleWrapper/dragabble-wrapper";
+import { v4 as uuidv4 } from 'uuid';
 
 function BurgerConstructor() {
   const chosenIngridients = useSelector((store) => store.chosenIngridients);
@@ -36,7 +37,7 @@ function BurgerConstructor() {
     drop(ingridient) {
       dispatch({
         type: ADD_CHOSEN_INGRIDIENT,
-        item: { ...ingridient },
+        item: { ...ingridient, uuid: uuidv4() },
       });
       dispatch({
         type: INCREASE_INGRIDIENT_QUANTITY,

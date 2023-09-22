@@ -1,6 +1,6 @@
 import Api from "../api";
 import { CLEAR_CHOSEN_INGRIDIENTS } from "./chosen-ingridients";
-import { getIngridients } from "./ingridients";
+import { RESET_INGRIDIENT_QUANTITY } from "./ingridients";
 
 export const MAKE_ORDER_REQUEST = 'MAKE_ORDER_REQUEST';
 export const MAKE_ORDER_SUCCESS = 'MAKE_ORDER_SUCCESS';
@@ -20,7 +20,7 @@ export function makeOrder(chosenIngridients) {
           dispatch({
             type: CLEAR_CHOSEN_INGRIDIENTS,
           });
-          dispatch(getIngridients());
+          dispatch({type: RESET_INGRIDIENT_QUANTITY})
         } else {
           dispatch({
             type: MAKE_ORDER_FAILED,
