@@ -1,102 +1,118 @@
-import React from "react";
 import {
-  ConstructorElement,
-  DragIcon,
-  CurrencyIcon,
   Button,
+  ConstructorElement,
+  CurrencyIcon,
+  DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import React, { useMemo } from "react";
+import { useDrop } from "react-dnd";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  ADD_CHOSEN_INGRIDIENT,
+  DELETE_CHOSEN_INGRIDIENT,
+} from "../../services/actions/chosen-ingridients";
+import {
+  DECREASE_INGRIDIENT_QUANTITY,
+  INCREASE_INGRIDIENT_QUANTITY,
+} from "../../services/actions/ingridients";
+import { makeOrder } from "../../services/actions/make-order";
+import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import styles from "./burger-constructor.module.css";
-import Modal from "../modal/modal";
-import {
-  IngridientsContext,
-  OrderContext,
-  orderDataInitialState,
-} from "../../utils/app-context";
-import Api from "../../utils/api";
+import DragabbleWrapper from "../dragabbleWrapper/dragabble-wrapper";
+import { v4 as uuidv4 } from 'uuid';
 
 function BurgerConstructor() {
-  const [orderSumm, setOrderSumm] = React.useState(0);
+  const chosenIngridients = useSelector((store) => store.chosenIngridients);
   const [showModal, setShowModal] = React.useState(false);
-  const [orderData, setOrderData] = React.useState(orderDataInitialState);
 
-  const placeOrder = () => {
+  const dispatch = useDispatch();
+
+  const bunIngridient = chosenIngridients.items.find(
+    (ingridient) => ingridient.type === "bun"
+  );
+
+  const [, dropTarget] = useDrop({
+    accept: "ingridient",
+    drop(ingridient) {
+      dispatch({
+        type: ADD_CHOSEN_INGRIDIENT,
+        item: { ...ingridient, uuid: uuidv4() },
+      });
+      dispatch({
+        type: INCREASE_INGRIDIENT_QUANTITY,
+        item: { ...ingridient },
+      });
+    },
+  });
+
+  const orderSumm = useMemo(
+    () =>
+      chosenIngridients.items.reduce(
+        (prev, ingridient) =>
+          prev + (ingridient.type === "bun" ? 2 : 1) * ingridient.price,
+        0
+      ),
+    [chosenIngridients]
+  );
+
+  const deleteChosenIgridient = function (ingridient) {
+    dispatch({
+      type: DELETE_CHOSEN_INGRIDIENT,
+      item: { ...ingridient },
+    });
+    dispatch({
+      type: DECREASE_INGRIDIENT_QUANTITY,
+      item: { ...ingridient },
+    });
+  };
+
+  const makeNewOrder = () => {
     setShowModal(true);
-    Api.getOrderDetails({
-      ingredients: [
-        bunIngridient._id,
-        ...otherIngridients.map((ingridient) => ingridient._id),
-        bunIngridient._id,
-      ],
-    })
-      .then((response) =>
-        setOrderData({
-          name: response.name,
-          number: response.order.number,
-        })
-      )
-      .catch((err) => console.log(err.json()));
-  };
-
-  const handlerCloseModal = () => {
-    setShowModal(false);
-    setOrderData(orderDataInitialState);
-  };
-  const { ingridients } = React.useContext(IngridientsContext);
-
-  const bunIngridient =
-    ingridients && ingridients.find((ingridient) => ingridient.type === "bun");
-
-  const otherIngridients =
-    ingridients &&
-    ingridients.filter((ingridient) => ingridient.type !== "bun");
-
-  function getOrderSumm() {
-    return (
-      (otherIngridients
-        ? otherIngridients.reduce((prev, ingridient) => {
-            return prev + ingridient.price;
-          }, 0)
-        : 0) + (bunIngridient ? bunIngridient.price * 2 : 0)
+    dispatch(
+      makeOrder({
+        ingredients: [
+          ...chosenIngridients.items.map((ingridient) => ingridient._id),
+        ],
+      })
     );
-  }
-
-  React.useEffect(() => setOrderSumm(getOrderSumm()), [ingridients]);
+  };
 
   return (
     <>
       {showModal && (
-        <OrderContext.Provider value={{ orderData, setOrderData }}>
-          <Modal handlerOnClose={handlerCloseModal}>
-            <OrderDetails />
-          </Modal>
-        </OrderContext.Provider>
+        <Modal handlerOnClose={() => setShowModal(false)}>
+          <OrderDetails />
+        </Modal>
       )}
-      <section className={styles.component}>
+      <section className={styles.component} ref={dropTarget}>
         {bunIngridient && (
           <ConstructorElement
             type="top"
             text={`${bunIngridient.name} (верх)`}
             price={bunIngridient.price}
             isLocked={true}
-            thumbnail={bunIngridient.image}
+            thumbnail={bunIngridient.image_mobile}
             extraClass="ml-1 mt-25 mb-4"
           />
         )}
         <ul className={styles.filling_ingridients}>
-          {otherIngridients &&
-            otherIngridients.map((ingridient, index) => (
-              <li
-                key={ingridient._id}
-                className={styles.filling_ingridients_item}
-              >
-                <DragIcon />
-                <ConstructorElement
-                  text={ingridient.name}
-                  price={ingridient.price}
-                  thumbnail={ingridient.image}
-                />
-              </li>
+          {chosenIngridients.items
+            .filter((ingridient) => ingridient.type !== "bun")
+            .map((ingridient) => (
+              <DragabbleWrapper item={ingridient} key={ingridient.uuid}>
+                <li
+                  className={styles.filling_ingridients_item}
+                >
+                  <DragIcon />
+                  <ConstructorElement
+                    text={ingridient.name}
+                    price={ingridient.price}
+                    thumbnail={ingridient.image_mobile}
+                    handleClose={() => deleteChosenIgridient(ingridient)}
+                  />
+                </li>
+              </DragabbleWrapper>
             ))}
         </ul>
         {bunIngridient && (
@@ -105,7 +121,7 @@ function BurgerConstructor() {
             text={`${bunIngridient.name} (низ)`}
             price={bunIngridient.price}
             isLocked={true}
-            thumbnail={bunIngridient.image}
+            thumbnail={bunIngridient.image_mobile}
             extraClass="ml-1 mt-4 mb-4"
           />
         )}
@@ -118,7 +134,8 @@ function BurgerConstructor() {
             htmlType="button"
             type="primary"
             size="large"
-            onClick={placeOrder}
+            onClick={makeNewOrder}
+            disabled={!(chosenIngridients.items.length >= 2)}
           >
             Оформить заказ
           </Button>

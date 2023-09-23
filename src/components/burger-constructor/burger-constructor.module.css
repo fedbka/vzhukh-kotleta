@@ -16,7 +16,7 @@
     padding: 0;
     list-style: none;
     overflow-y: scroll;
-    height: 75vh;
+    height: 60vh;
 }
 
 .filling_ingridients::-webkit-scrollbar {
@@ -37,7 +37,7 @@
 
 .accept_order {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     flex-direction: row;
     width: 100%;
     gap: 40px;
