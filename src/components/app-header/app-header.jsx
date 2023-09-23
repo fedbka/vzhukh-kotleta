@@ -18,7 +18,7 @@ function AppHeader() {
       <nav className={styles.nav_type_logo}>
         <NavigationLink Icon={Logo} text="" link="#" />
       </nav>
-      <nav className={`${styles.nav}`}>
+      <nav className={styles.nav}>
         <NavigationLink Icon={ProfileIcon} text="Личный кабинет" />
       </nav>
     </header>
