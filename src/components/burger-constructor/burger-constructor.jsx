@@ -22,7 +22,7 @@ import styles from "./burger-constructor.module.css";
 import DragabbleWrapper from "../dragabbleWrapper/dragabble-wrapper";
 import { v4 as uuidv4 } from 'uuid';
 
-function BurgerConstructor() {
+const BurgerConstructor = () => {
   const chosenIngridients = useSelector((store) => store.chosenIngridients);
   const [showModal, setShowModal] = React.useState(false);
 

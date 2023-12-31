@@ -9,6 +9,6 @@ export const rootReducer = combineReducers({
     ingridients: ingridientsReducer,
     ingridientsTypes: ingridientsTypesReducer,
     chosenIngridients: chosenIngridientsReducer,
-    order: orderReducer,
     selectedIngridient: selectedIngridientReducer,
+    order: orderReducer,
 });

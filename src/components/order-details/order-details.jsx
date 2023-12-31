@@ -1,9 +1,8 @@
-import React from "react";
 import { useSelector } from "react-redux";
 import styles from "./order-details.module.css";
 import imageDone from "../../images/done.png";
 
-export default function OrderDetails() {
+const OrderDetails = () => {
   const { number, description, requestFailed } = useSelector(
     (state) => state.order
   );
@@ -43,3 +42,5 @@ export default function OrderDetails() {
     </div>
   );
 }
+
+export default OrderDetails;

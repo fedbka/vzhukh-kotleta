@@ -1,26 +1,30 @@
 import propTypes from "prop-types";
 import styles from "./navigation-link.module.css";
+import { NavLink } from "react-router-dom";
 
-function NavigationLink({ Icon, text, link = "#", active = false }) {
+const NavigationLink = ({ Icon, text ="", link = "/" }) => {
   return (
-    <a className={styles.link} href={link}>
-      <Icon type={active ? "primary" : "secondary"} />
-      <p
-        className={
-          "text text_type_main-default " + (!active && "text_color_inactive")
-        }
-      >
-        {text}
-      </p>
-    </a>
+    <NavLink to={link} className={styles.link}>
+      {({ isActive }) => (
+        <>
+          <Icon type={isActive ? "primary" : "secondary"} />
+          <p
+            className={
+              "text text_type_main-default" + (!isActive ? " text_color_inactive" : "")
+            }
+          >
+            {text}
+          </p>
+        </>
+      )}
+    </NavLink>
   );
 }
 
 NavigationLink.propTypes = {
   Icon: propTypes.elementType.isRequired,
-  text: propTypes.string.isRequired,
+  text: propTypes.string,
   link: propTypes.string,
-  active: propTypes.bool,
-}
+};
 
 export default NavigationLink;

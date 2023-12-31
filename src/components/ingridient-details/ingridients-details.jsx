@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./ingridients-details.module.css";
 import propTypes from "prop-types";
 
-export default function IngridientDetails({ ingridient }) {
+const IngridientDetails = ({ ingridient }) => {
   return (
     <div className={styles.card}>
       <h1 className={`${styles.title} text text_type_main-large`}>Детали ингридиента</h1>
@@ -43,3 +43,5 @@ export default function IngridientDetails({ ingridient }) {
 IngridientDetails.propTypes = {
   ingridient: propTypes.object.isRequired,
 };
+
+export default IngridientDetails;

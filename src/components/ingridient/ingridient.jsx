@@ -3,7 +3,8 @@ import { useDrag } from "react-dnd";
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./ingridient.module.css";
 import propTypes from "prop-types";
-function Ingridient({ ingridient, ingridientOnClick }) {
+
+const Ingridient = ({ ingridient, ingridientOnClick }) => {
   const [, dragRef] = useDrag({
     type: 'ingridient',
     item: {...ingridient},

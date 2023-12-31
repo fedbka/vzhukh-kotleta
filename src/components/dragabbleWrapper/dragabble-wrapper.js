@@ -2,7 +2,7 @@ import { useDrag, useDrop } from "react-dnd";
 import { useDispatch } from "react-redux";
 import { CHANGE_POSITION_OF_CHOSEN_INGRIDIENT } from "../../services/actions/chosen-ingridients";
 
-const DragabbleWrapper= ({ children, item }) => {
+const DragabbleWrapper = ({ children, item }) => {
   const [, dragRef] = useDrag({
     type: 'chosenIngridient',
     item: {...item}, 

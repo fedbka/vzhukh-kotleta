@@ -6,7 +6,7 @@
     justify-content: space-between;
     min-height: 88px;
     max-width: 1920px;
-    margin: 40px 0 Auto;
+    margin: 40px Auto 0;
 }
 
 .nav {
@@ -19,9 +19,4 @@
 
 .nav_type_logo {
     min-width: 289px;
-}
-
-.nav_type_right {
-    justify-content: stretch;
-
 }

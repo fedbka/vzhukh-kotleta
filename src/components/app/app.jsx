@@ -1,21 +1,19 @@
-import React from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import styles from "./app.module.css";
+import { Route, Routes, useLocation } from "react-router-dom";
 import AppHeader from "../app-header/app-header";
-import BurgerConstructor from "../burger-constructor/burger-constructor";
-import BurgerIngredients from "../burger-ingredients/burger-ingredients";
+import ConstructorPage from "../../pages/ConstructorPage/ConstructorPage";
+import LoginPage from "../../pages/LoginPage/LoginPage";
+import FeedPage from "../../pages/FeedPage/FeedPage";
 
-function App() {
+const App = () => {
+  const location = useLocation();
   return (
     <div>
       <AppHeader />
-      <main className={styles.main}>
-        <DndProvider backend={HTML5Backend}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </DndProvider>
-      </main>
+      <Routes location={location}>
+        <Route path='/' element={<ConstructorPage />} />
+        <Route path='/feed' element={<FeedPage/>}/>
+        <Route path='/profile' element={<LoginPage/>}/>
+      </Routes>
     </div>
   );
 }

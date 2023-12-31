@@ -6,7 +6,7 @@ import ReactDOM from "react-dom";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const modalRoot = document.getElementById("modal");
-function Modal({ handlerOnClose, children }) {
+const Modal = ({ handlerOnClose, children }) => {
 
     useEffect(() => {
         const handlerOnPressEsc = (event) => event.key === 'Escape' && handlerOnClose();
