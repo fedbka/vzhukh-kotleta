@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDispatch, useSelector } from "react-redux";
 import { getIngridients } from "../../services/actions/ingridients";
@@ -22,7 +22,7 @@ const BurgerIngredients = () => {
 
   const dispatch = useDispatch();
 
-  const [showModal, setShowModal] = React.useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const refUl = useRef();
   const refBunTab = useRef();
