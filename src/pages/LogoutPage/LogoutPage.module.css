@@ -1,0 +1,10 @@
+.page {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+    margin: 120px auto;
+    max-width: 1240px;
+}

@@ -6,7 +6,7 @@ import styles from "./ConstructorPage.module.css";
 
 const ConstructorPage = () => {
   return (
-    <main className={styles.main}>
+    <main className={styles.page}>
       <DndProvider backend={HTML5Backend}>
         <BurgerIngredients />
         <BurgerConstructor />
