@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import styles from "./order-details.module.css";
 import imageDone from "../../images/done.png";
+import styles from "./order-details.module.css";
 
 const OrderDetails = () => {
   const { number, description, requestFailed } = useSelector(
@@ -15,7 +15,7 @@ const OrderDetails = () => {
           </p>
           <p className={`text text_type_main-default ${styles.text}`}>
             Пожалуйста, повторите позднее.
-          </p>        
+          </p>
         </>
       )}
       {!requestFailed && (
@@ -41,6 +41,6 @@ const OrderDetails = () => {
       )}
     </div>
   );
-}
+};
 
 export default OrderDetails;

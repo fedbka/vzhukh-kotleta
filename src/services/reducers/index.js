@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
-import { ingridientsReducer } from './ingridients';
-import { ingridientsTypesReducer } from './ingridient-types';
 import { chosenIngridientsReducer } from './chosen-ingridients';
+import { ingridientsTypesReducer } from './ingridient-types';
+import { ingridientsReducer } from './ingridients';
 import { orderReducer } from './make-order';
 import { selectedIngridientReducer } from './selected-ingridient';
 

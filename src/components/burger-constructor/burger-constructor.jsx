@@ -7,6 +7,7 @@ import {
 import React, { useMemo } from "react";
 import { useDrop } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 import {
   ADD_CHOSEN_INGRIDIENT,
   DELETE_CHOSEN_INGRIDIENT,
@@ -16,11 +17,10 @@ import {
   INCREASE_INGRIDIENT_QUANTITY,
 } from "../../services/actions/ingridients";
 import { makeOrder } from "../../services/actions/make-order";
+import DragabbleWrapper from "../dragabbleWrapper/dragabble-wrapper";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import styles from "./burger-constructor.module.css";
-import DragabbleWrapper from "../dragabbleWrapper/dragabble-wrapper";
-import { v4 as uuidv4 } from 'uuid';
 
 const BurgerConstructor = () => {
   const chosenIngridients = useSelector((store) => store.chosenIngridients);
@@ -101,9 +101,7 @@ const BurgerConstructor = () => {
             .filter((ingridient) => ingridient.type !== "bun")
             .map((ingridient) => (
               <DragabbleWrapper item={ingridient} key={ingridient.uuid}>
-                <li
-                  className={styles.filling_ingridients_item}
-                >
+                <li className={styles.filling_ingridients_item}>
                   <DragIcon />
                   <ConstructorElement
                     text={ingridient.name}
@@ -143,6 +141,6 @@ const BurgerConstructor = () => {
       </section>
     </>
   );
-}
+};
 
 export default BurgerConstructor;

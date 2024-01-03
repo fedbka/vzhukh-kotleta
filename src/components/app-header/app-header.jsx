@@ -11,17 +11,21 @@ const AppHeader = () => {
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>
-        <NavigationLink Icon={BurgerIcon} link='/' text="Конструктор" />
-        <NavigationLink Icon={ListIcon} link='/feed' text="Лента заказов" />
+        <NavigationLink Icon={BurgerIcon} link="/" text="Конструктор" />
+        <NavigationLink Icon={ListIcon} link="/feed" text="Лента заказов" />
       </nav>
       <nav className={styles.nav_type_logo}>
-        <NavigationLink Icon={Logo} link="/" text=""/>
+        <NavigationLink Icon={Logo} link="/" text="" />
       </nav>
       <nav className={styles.nav}>
-        <NavigationLink Icon={ProfileIcon} link='/profile' text="Личный кабинет" />
+        <NavigationLink
+          Icon={ProfileIcon}
+          link="/profile"
+          text="Личный кабинет"
+        />
       </nav>
     </header>
   );
-}
+};
 
 export default AppHeader;

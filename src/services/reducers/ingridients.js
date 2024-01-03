@@ -1,9 +1,9 @@
 import {
+  DECREASE_INGRIDIENT_QUANTITY,
+  GET_INGRIDIENTS_FAILED,
   GET_INGRIDIENTS_REQUEST,
   GET_INGRIDIENTS_SUCCESS,
-  GET_INGRIDIENTS_FAILED,
   INCREASE_INGRIDIENT_QUANTITY,
-  DECREASE_INGRIDIENT_QUANTITY,
   RESET_INGRIDIENT_QUANTITY
 } from '../actions/ingridients';
 
@@ -42,25 +42,25 @@ export const ingridientsReducer = (state = initialState, action) => {
         ...state,
         items: [...state.items.map(item => {
           if (action.item.type === 'bun') {
-            return item._id === action.item._id ? {...item, __v : 2} : item.type === 'bun' ? {...item, __v: 0} : {...item};
+            return item._id === action.item._id ? { ...item, __v: 2 } : item.type === 'bun' ? { ...item, __v: 0 } : { ...item };
           } else {
-            return item._id === action.item._id ? {...item, __v : item.__v + 1} : item;
+            return item._id === action.item._id ? { ...item, __v: item.__v + 1 } : item;
           }
-          })],
+        })],
       }
     }
     case DECREASE_INGRIDIENT_QUANTITY: {
       return {
         ...state,
-        items: [...state.items.map(item => item._id === action.item._id ? {...item, __v : item.__v - 1} : item)],
+        items: [...state.items.map(item => item._id === action.item._id ? { ...item, __v: item.__v - 1 } : item)],
       }
-    } 
+    }
     case RESET_INGRIDIENT_QUANTITY: {
       return {
         ...state,
-        items: [...state.items.map(item => ({...item, __v : 0}))],
+        items: [...state.items.map(item => ({ ...item, __v: 0 }))],
       }
-    }        
+    }
     default: {
       return state;
     }

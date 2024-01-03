@@ -1,7 +1,7 @@
 import {
+  GET_INGRIDIENTS_TYPES_FAILED,
   GET_INGRIDIENTS_TYPES_REQUEST,
   GET_INGRIDIENTS_TYPES_SUCCESS,
-  GET_INGRIDIENTS_TYPES_FAILED,
   SET_CURRENT_INGRIDIENTS_TYPE,
 } from '../actions/ingridients-types';
 
@@ -37,7 +37,7 @@ export const ingridientsTypesReducer = (state = initialState, action) => {
     case SET_CURRENT_INGRIDIENTS_TYPE: {
       return {
         ...state,
-        currentItem: {...action.item}
+        currentItem: { ...action.item }
       }
     }
     default: {

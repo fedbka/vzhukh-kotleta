@@ -4,8 +4,8 @@ import {
   Input,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import styles from "./profile-edit.module.css";
 import { useState } from "react";
+import styles from "./profile-edit.module.css";
 
 const ProfileEdit = () => {
   const storedProfileData = {
@@ -14,7 +14,7 @@ const ProfileEdit = () => {
     password: "gfhjkm,0",
   };
 
-  const [profileData, setProfileData] = useState({...storedProfileData});
+  const [profileData, setProfileData] = useState({ ...storedProfileData });
 
   const OnChangeValuesHandler = (event) => {
     setProfileData((previousProfileData) => ({
@@ -23,7 +23,7 @@ const ProfileEdit = () => {
     }));
   };
 
-  const ResetChanges = () => setProfileData({...storedProfileData});
+  const ResetChanges = () => setProfileData({ ...storedProfileData });
   console.log(profileData);
 
   return (
@@ -35,21 +35,33 @@ const ProfileEdit = () => {
           onChange={OnChangeValuesHandler}
           type="text"
           placeholder="Имя"
-          icon={storedProfileData.name !== profileData.name ? "CloseIcon" : "EditIcon" }
+          icon={
+            storedProfileData.name !== profileData.name
+              ? "CloseIcon"
+              : "EditIcon"
+          }
         />
         <EmailInput
           name={"email"}
           value={profileData.email}
           onChange={OnChangeValuesHandler}
           placeholder="Логин"
-          icon={storedProfileData.email !== profileData.email ? "CloseIcon" : "EditIcon" }
+          icon={
+            storedProfileData.email !== profileData.email
+              ? "CloseIcon"
+              : "EditIcon"
+          }
         />
         <PasswordInput
           name={"password"}
           value={profileData.password}
           onChange={OnChangeValuesHandler}
           placeholder="Пароль"
-          icon={storedProfileData.password !== profileData.password ? "CloseIcon" : "EditIcon" }
+          icon={
+            storedProfileData.password !== profileData.password
+              ? "CloseIcon"
+              : "EditIcon"
+          }
           disabled={false}
         />
         <div className={styles.formButtons}>

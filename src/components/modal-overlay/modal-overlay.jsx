@@ -1,5 +1,5 @@
-import styles from "./modal-overlay.module.css";
 import propTypes from "prop-types";
+import styles from "./modal-overlay.module.css";
 
 const ModalOverlay = ({ onClick, children }) => {
   return (
@@ -7,7 +7,7 @@ const ModalOverlay = ({ onClick, children }) => {
       {children}
     </div>
   );
-}
+};
 
 ModalOverlay.propTypes = {
   onClick: propTypes.func.isRequired,

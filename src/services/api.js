@@ -30,7 +30,7 @@ class IngridientsApi {
   }
 
   getIngridients = () => this._request('ingredients');
-  
+
   getIngridientsTypes = async () => {
     return await new Promise(resolve =>
       setTimeout(() =>
@@ -44,7 +44,7 @@ class IngridientsApi {
         }), 100)
     );
   };
-  
+
   makeOrder = (ingridients) => this._request('orders', 'POST', ingridients);
 
 }

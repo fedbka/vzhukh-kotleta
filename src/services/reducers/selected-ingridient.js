@@ -1,6 +1,6 @@
 import {
-  SET_SELECTED_INGRIDIENT,
-  DELETE_SELECTED_INGRIDIENT
+  DELETE_SELECTED_INGRIDIENT,
+  SET_SELECTED_INGRIDIENT
 } from '../actions/selected-ingridient';
 
 const initialState = {
@@ -12,7 +12,7 @@ export const selectedIngridientReducer = (state = initialState, action) => {
     case SET_SELECTED_INGRIDIENT: {
       return {
         ...state,
-        item: {...action.item},
+        item: { ...action.item },
       }
     }
     case DELETE_SELECTED_INGRIDIENT: {
@@ -20,7 +20,7 @@ export const selectedIngridientReducer = (state = initialState, action) => {
         ...state,
         item: initialState.item,
       }
-    }    
+    }
     default: {
       return state;
     }

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getIngridients } from "../../services/actions/ingridients";
 import {
@@ -49,12 +49,11 @@ const BurgerIngredients = () => {
     const topOfSauceTab = refSauceTab.current.getBoundingClientRect().top;
 
     if (topOfSauceTab < topOfIngridientsList) {
-      dispatch({ type: SET_CURRENT_INGRIDIENTS_TYPE, item: {id: 'main'} });
-    } else
-    if (topOfBunTab < topOfIngridientsList) {
-      dispatch({ type: SET_CURRENT_INGRIDIENTS_TYPE, item: {id: 'sauce'} });
+      dispatch({ type: SET_CURRENT_INGRIDIENTS_TYPE, item: { id: "main" } });
+    } else if (topOfBunTab < topOfIngridientsList) {
+      dispatch({ type: SET_CURRENT_INGRIDIENTS_TYPE, item: { id: "sauce" } });
     } else {
-      dispatch({ type: SET_CURRENT_INGRIDIENTS_TYPE, item: {id: 'bun'} });
+      dispatch({ type: SET_CURRENT_INGRIDIENTS_TYPE, item: { id: "bun" } });
     }
   };
 

@@ -1,7 +1,7 @@
 import {
+  MAKE_ORDER_FAILED,
   MAKE_ORDER_REQUEST,
   MAKE_ORDER_SUCCESS,
-  MAKE_ORDER_FAILED,
 } from '../actions/make-order';
 
 const initialState = {

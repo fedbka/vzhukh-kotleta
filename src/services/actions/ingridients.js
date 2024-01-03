@@ -26,8 +26,8 @@ export function getIngridients() {
       }
     }).catch(err => {
       dispatch({
-          type: GET_INGRIDIENTS_FAILED,
+        type: GET_INGRIDIENTS_FAILED,
       })
-  });
+    });
   };
 }

@@ -2,7 +2,7 @@ import Api from "../api";
 
 export const GET_INGRIDIENTS_TYPES_REQUEST = 'GET_INGRIDIENTS_TYPES_REQUEST';
 export const GET_INGRIDIENTS_TYPES_SUCCESS = 'GET_INGRIDIENTS_TYPES_SUCCESS';
-export const GET_INGRIDIENTS_TYPES_FAILED =  'GET_INGRIDIENTS_TYPES_FAILED';
+export const GET_INGRIDIENTS_TYPES_FAILED = 'GET_INGRIDIENTS_TYPES_FAILED';
 
 export const SET_CURRENT_INGRIDIENTS_TYPE = 'SET_CURRENT_INGRIDIENTS_TYPE';
 
@@ -19,7 +19,7 @@ export function getIngridientsTypes() {
         });
         dispatch({
           type: SET_CURRENT_INGRIDIENTS_TYPE,
-          item: res.data[0] ? res.data[0] : {}, 
+          item: res.data[0] ? res.data[0] : {},
         });
       } else {
         dispatch({
@@ -28,8 +28,8 @@ export function getIngridientsTypes() {
       }
     }).catch(err => {
       dispatch({
-          type: GET_INGRIDIENTS_TYPES_FAILED,
+        type: GET_INGRIDIENTS_TYPES_FAILED,
       })
-  });
+    });
   };
 }
