@@ -4,65 +4,57 @@ import {
   Input,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import styles from "./profile-edit.module.css";
+import { useSelector } from "react-redux";
 
 const ProfileEdit = () => {
-  const storedProfileData = {
-    name: "Andrey Fadeyev",
-    email: "fadeyeval@outlook.com",
-    password: "gfhjkm,0",
-  };
+  const userProfile = useSelector((state) => state.authentication.userProfile);
 
-  const [profileData, setProfileData] = useState({ ...storedProfileData });
+  const [formData, setformData] = useState({ ...userProfile });
 
-  const OnChangeValuesHandler = (event) => {
-    setProfileData((previousProfileData) => ({
-      ...previousProfileData,
+  const OnChangeValuesHandler = useCallback((event) => {
+    setformData((previousformData) => ({
+      ...previousformData,
       [event.target.name]: event.target.value,
     }));
-  };
+  }, []);
 
-  const ResetChanges = () => setProfileData({ ...storedProfileData });
-  console.log(profileData);
+  const ResetChanges = useCallback(() => setformData({ ...userProfile }), [userProfile]);
 
   return (
     <div className={styles.main}>
       <form className={styles.form}>
         <Input
           name="name"
-          value={profileData.name}
+          value={formData.name}
           onChange={OnChangeValuesHandler}
           type="text"
           placeholder="Имя"
           icon={
-            storedProfileData.name !== profileData.name
+            formData.name !== userProfile.name
               ? "CloseIcon"
               : "EditIcon"
           }
         />
         <EmailInput
-          name={"email"}
-          value={profileData.email}
+          name="email"
+          value={formData.email}
           onChange={OnChangeValuesHandler}
           placeholder="Логин"
           icon={
-            storedProfileData.email !== profileData.email
+            formData.email !== userProfile.email
               ? "CloseIcon"
               : "EditIcon"
           }
         />
         <PasswordInput
-          name={"password"}
-          value={profileData.password}
+          name="password"
+          value={formData.password}
           onChange={OnChangeValuesHandler}
           placeholder="Пароль"
-          icon={
-            storedProfileData.password !== profileData.password
-              ? "CloseIcon"
-              : "EditIcon"
-          }
-          disabled={false}
+          icon="EditIcon"
+          autoComplete="off"
         />
         <div className={styles.formButtons}>
           <Button htmlType="button" type="secondary" onClick={ResetChanges}>

@@ -4,9 +4,10 @@ import {
   CurrencyIcon,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useDrop } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import {
   ADD_CHOSEN_INGRIDIENT,
@@ -24,8 +25,9 @@ import styles from "./burger-constructor.module.css";
 
 const BurgerConstructor = () => {
   const chosenIngridients = useSelector((store) => store.chosenIngridients);
-  const [showModal, setShowModal] = React.useState(false);
-
+  const [showModal, setShowModal] = useState(false);
+  const userAuthenticated = useSelector((store) => store.authentication.userAuthenticated);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const bunIngridient = chosenIngridients.items.find(
@@ -68,6 +70,10 @@ const BurgerConstructor = () => {
   };
 
   const makeNewOrder = () => {
+    if (!userAuthenticated) {
+      navigate("/login");
+      return;
+    }
     setShowModal(true);
     dispatch(
       makeOrder({

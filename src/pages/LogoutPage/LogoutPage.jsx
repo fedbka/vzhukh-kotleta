@@ -1,14 +1,16 @@
-import { Navigate } from "react-router-dom";
-import styles from "./LogoutPage.module.css";
-import ProfileNavigation from "../../components/profile-navigation/profile-navigation";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../services/actions/authentication";
+import { useNavigate } from "react-router-dom";
 
 const LogoutPage = () => {
-  return (
-    <main className={styles.page}>
-      <ProfileNavigation pageAnnotation="В этом разделе вы можете выйти из своего профиля"/>
-      <Navigate to="/login"/>
-    </main>
-  );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  dispatch(logoutUser())
+    .then(()=> {
+      navigate('/', { replace: false});
+    });
+  
+  return null;
 };
 
 export default LogoutPage;

@@ -1,9 +1,4 @@
-import {
-  BurgerIcon,
-  ListIcon,
-  Logo,
-  ProfileIcon,
-} from "@ya.praktikum/react-developer-burger-ui-components";
+import { BurgerIcon, ListIcon, Logo, ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import NavigationLink from "../navigation-link/navigation-link";
 import styles from "./app-header.module.css";
 
@@ -18,11 +13,7 @@ const AppHeader = () => {
         <NavigationLink Icon={Logo} link="/" text="" />
       </nav>
       <nav className={styles.nav}>
-        <NavigationLink
-          Icon={ProfileIcon}
-          link="/profile"
-          text="Личный кабинет"
-        />
+        <NavigationLink Icon={ProfileIcon} link="/forgot-password" text="Личный кабинет" />
       </nav>
     </header>
   );

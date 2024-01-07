@@ -4,6 +4,7 @@ import { ingridientsTypesReducer } from './ingridient-types';
 import { ingridientsReducer } from './ingridients';
 import { orderReducer } from './make-order';
 import { selectedIngridientReducer } from './selected-ingridient';
+import { authenticationReducer } from './authentication';
 
 export const rootReducer = combineReducers({
     ingridients: ingridientsReducer,
@@ -11,4 +12,5 @@ export const rootReducer = combineReducers({
     chosenIngridients: chosenIngridientsReducer,
     selectedIngridient: selectedIngridientReducer,
     order: orderReducer,
+    authentication: authenticationReducer,
 });

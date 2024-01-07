@@ -1,4 +1,6 @@
 import { Route, Routes, useLocation } from "react-router-dom";
+import { AuthorizedRoute } from "../authorized-route/authorized-route";
+import { AnonymousRoute } from "../anonymous-route/anonymous-route";
 import ConstructorPage from "../../pages/ConstructorPage/ConstructorPage";
 import FeedPage from "../../pages/FeedPage/FeedPage";
 import LoginPage from "../../pages/LoginPage/LoginPage";
@@ -17,14 +19,14 @@ const App = () => {
       <AppHeader />
       <Routes location={location}>
         <Route path="/" element={<ConstructorPage />} />
-        <Route path="/feed" element={<FeedPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/profile/orders" element={<OrdersHistoryPage />} />
-        <Route path="/logout" element={<LogoutPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegistrationPage />} />
-        <Route path="/forgot-password" element={<PasswordRecoveryPage />} />
-        <Route path="/reset-password" element={<PasswordResetPage />} />
+        <Route path="/feed" element={<AuthorizedRoute element={<FeedPage />} />} />
+        <Route path="/profile" element={<AuthorizedRoute element={<ProfilePage />} />} />
+        <Route path="/profile/orders" element={<AuthorizedRoute element={<OrdersHistoryPage />} />} />
+        <Route path="/logout" element={<AuthorizedRoute element={<LogoutPage />} />} />
+        <Route path="/login" element={<AnonymousRoute element={<LoginPage />} />} />
+        <Route path="/register" element={<AnonymousRoute element={<RegistrationPage />} />} />
+        <Route path="/forgot-password" element={<AnonymousRoute element={<PasswordRecoveryPage />} />} />
+        <Route path="/reset-password" element={<AnonymousRoute element={<PasswordResetPage />} />} />
       </Routes>
     </div>
   );

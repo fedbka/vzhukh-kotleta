@@ -6,6 +6,7 @@ const OrderDetails = () => {
   const { number, description, requestFailed } = useSelector(
     (state) => state.order
   );
+
   return (
     <div className={styles.card}>
       {requestFailed && (

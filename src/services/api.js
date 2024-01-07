@@ -1,35 +1,35 @@
-const baseUrl = "https://norma.nomoreparties.space/api";
+const BASE_URL = "https://norma.nomoreparties.space/api";
 
-class IngridientsApi {
+class vzukhKotletaApi {
 
-  constructor(baseUrl, authorizationToken = '') {
+  constructor(BASE_URL, authorizationToken = "") {
 
-    this._baseUrl = baseUrl;
+    this._BASE_URL = BASE_URL;
     this._authorizationToken = authorizationToken;
     this._config = {
-      baseUrl: baseUrl,
+      BASE_URL: BASE_URL,
       headers: {
-        ...(this._authorizationToken ? { 'authorization': this._authorizationToken } : {}),
-        'Content-Type': 'application/json; charset=utf-8',
+        ...(this._authorizationToken ? { "authorization": this._authorizationToken } : {}),
+        "Content-Type": "application/json; charset=utf-8",
       }
     }
   }
 
-  _request = async (endpoint, method = 'GET', body = '') => {
+  _request = async (endpoint, method = "GET", body = "") => {
 
     const params = {
-      'method': method,
-      'headers': this._config.headers,
+      "method": method,
+      "headers": this._config.headers,
     }
 
-    if (method !== 'GET' && body) params.body = JSON.stringify(body);
+    if (method !== "GET" && body) params.body = JSON.stringify(body);
 
-    const res = await fetch(`${this._config.baseUrl}/${endpoint}`, params);
+    const res = await fetch(`${this._config.BASE_URL}/${endpoint}`, params);
     if (res.ok) return res.json();
     return await Promise.reject(res);
   }
 
-  getIngridients = () => this._request('ingredients');
+  getIngridients = () => this._request("ingredients");
 
   getIngridientsTypes = async () => {
     return await new Promise(resolve =>
@@ -45,10 +45,20 @@ class IngridientsApi {
     );
   };
 
-  makeOrder = (ingridients) => this._request('orders', 'POST', ingridients);
+  makeOrder = (ingridients) => this._request("orders", "POST", ingridients);
+
+  registerUser = (userProfile) => this._request("auth/register", "POST", userProfile);
+
+  loginUser = (userProfile) => this._request("auth/login", "POST", userProfile);
+
+  logoutUser = (refreshToken) => this._request("auth/logout", "POST", { token: refreshToken });
+
+  passwordRecovery = (email) => this._request("password-reset", "POST", { email });
+
+  passwordReset = (password, token) => this._request("password-reset/reset", "POST", { password, token })
 
 }
 
-const ingridientsApi = new IngridientsApi(baseUrl);
+const Api = new vzukhKotletaApi(BASE_URL);
 
-export default ingridientsApi;
+export default Api;

@@ -26,4 +26,3 @@ export const selectedIngridientReducer = (state = initialState, action) => {
     }
   }
 }
-
