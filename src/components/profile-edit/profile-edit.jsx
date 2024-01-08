@@ -49,14 +49,16 @@ const ProfileEdit = () => {
           icon="EditIcon"
           autoComplete="off"
         />
-        <div className={styles.formButtons}>
-          <Button htmlType="button" type="secondary" onClick={ResetChanges}>
-            Отмена
-          </Button>
-          <Button htmlType="submit" type="primary">
-            Сохранить
-          </Button>
-        </div>
+        { (formData.name !== userProfile.name || formData.email !== userProfile.email || formData.password) && (
+          <div className={styles.formButtons}>
+            <Button htmlType="button" type="secondary" onClick={ResetChanges}>
+              Отмена
+            </Button>
+            <Button htmlType="submit" type="primary">
+              Сохранить
+            </Button>
+          </div>)
+        }
       </form>
     </div>
   );
