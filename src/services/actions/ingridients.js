@@ -8,7 +8,7 @@ export const getIngridientsRequest = () => ({
 export const GET_INGRIDIENTS_SUCCESS = 'GET_INGRIDIENTS_SUCCESS';
 export const getIngridientsSuccess = (ingridients) => ({
   type: GET_INGRIDIENTS_SUCCESS,
-  payload: { ingridients },
+  payload: ingridients,
 });
 
 export const GET_INGRIDIENTS_FAILED = 'GET_INGRIDIENTS_FAILED';
@@ -38,13 +38,10 @@ export const resetIngridientQuantity = () => ({
 export function getIngridients() {
   return function (dispatch) {
     dispatch(getIngridientsRequest());
-    Api.getIngridients().then(res => {
-      if (res && res.success) {
-        dispatch(getIngridientsSuccess(res.data));
-      } else {
-        dispatch(getIngridientsFailed());
-      }
-    }).catch(err => {
+    Api.getIngridients()
+    .then(res => dispatch(getIngridientsSuccess(res.data)))
+    .catch(err => {
+      console.log(err);
       dispatch(getIngridientsFailed);
     });
   };

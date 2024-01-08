@@ -1,4 +1,5 @@
 import { useDrag, useDrop } from "react-dnd";
+import propTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { CHANGE_POSITION_OF_CHOSEN_INGRIDIENT } from "../../services/actions/chosen-ingridients";
 
@@ -21,6 +22,11 @@ const DragabbleWrapper = ({ children, item }) => {
   });
 
   return <div ref={(node) => dragRef(dropRef(node))}>{children}</div>;
+};
+
+DragabbleWrapper.propTypes = {
+  item: propTypes.object.isRequired,
+  children: propTypes.any,
 };
 
 export default DragabbleWrapper;

@@ -11,7 +11,7 @@ const LoginPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const OnChangeValuesHandler = (event) => {
+  const onChangeValuesHandler = (event) => {
     setFormData((previousProfileData) => ({
       ...previousProfileData,
       [event.target.name]: event.target.value,
@@ -29,8 +29,8 @@ const LoginPage = () => {
     <main className={styles.page}>
       <h1 className="pt-0 pb-0 text text_type_main-large">Вход</h1>
       <form className={styles.form} onSubmit={onSubmitFormHandler} autoComplete="off">
-        <EmailInput name="email" value={formData.email} onChange={OnChangeValuesHandler} autoComplete="off" />
-        <PasswordInput name="password" value={formData.password} onChange={OnChangeValuesHandler} autoComplete="off" />
+        <EmailInput name="email" value={formData.email} onChange={onChangeValuesHandler} autoComplete="off" />
+        <PasswordInput name="password" value={formData.password} onChange={onChangeValuesHandler} autoComplete="off" />
         <Button htmlType="submit" type="primary" extraClass={styles.submitButton}>
           Войти
         </Button>

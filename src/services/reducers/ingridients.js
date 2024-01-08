@@ -26,7 +26,7 @@ export const ingridientsReducer = (state = initialState, action) => {
     case GET_INGRIDIENTS_SUCCESS: {
       return {
         ...state,
-        items: action.payload.ingridients,
+        items: [...action.payload],
         isFetching: false,
         itemsLoaded: true,
       }

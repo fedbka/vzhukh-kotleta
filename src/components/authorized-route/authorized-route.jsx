@@ -1,3 +1,4 @@
+import propTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 
@@ -10,4 +11,8 @@ export const AuthorizedRoute = ({ element }) => {
   }
 
   return element;
+};
+
+AuthorizedRoute.propTypes = {
+  element: propTypes.object.isRequired,
 };

@@ -27,15 +27,11 @@ export function getIngridientsTypes() {
     dispatch(getIngridientsTypesRequest());
     Api.getIngridientsTypes()
       .then(res => {
-        if (res && res.success) {
-          dispatch(getIngridientsTypesSuccess(res.data));
-          dispatch(setCurrentIngridientsType(res.data[0] ? res.data[0] : {}));
-        } else {
-          dispatch(getIngridientsTypesFailed());
-          dispatch(setCurrentIngridientsType({}));
-        }
+        dispatch(getIngridientsTypesSuccess(res.data));
+        dispatch(setCurrentIngridientsType(res.data[0] ? res.data[0] : {}));
       })
       .catch(err => {
+        console.log(err);
         dispatch(getIngridientsTypesFailed());
         dispatch(setCurrentIngridientsType({}));
       });

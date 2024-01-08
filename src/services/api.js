@@ -22,11 +22,14 @@ class vzukhKotletaApi {
 
     if (method !== "GET" && body) params.body = JSON.stringify(body);
 
-    const res = await fetch(`${this._config.BASE_URL}/${endpoint}`, params);
-    
-    if (res.ok) return await res.json();
+    const response = await fetch(`${this._config.BASE_URL}/${endpoint}`, params);
+    if (!response.ok) return await Promise.reject(response);
 
-    return await Promise.reject(res);
+    const json = await response.json();
+    if (!json || !json.success) return Promise.reject(json);
+
+    return json;
+
   }
 
   _requestWithRefesh = async (endpoint, method = "GET", body = "", accessToken = "", refreshToken = "", saveTockensCallback = null) => {
@@ -37,40 +40,37 @@ class vzukhKotletaApi {
     }
 
     if (method !== "GET" && body) params.body = JSON.stringify(body);
+
+    const response = await fetch(`${this._config.BASE_URL}/${endpoint}`, params);
     
-    const res = await fetch(`${this._config.BASE_URL}/${endpoint}`, params);    
+    if (!response.ok) return await Promise.reject(response);
+    
+    const json = await response.json();
+    if (json && json.success) return response;
 
-    if (res.ok) return await res.json();
+    if (json.message !== "jwt expired") return Promise.reject(json);
 
-    if (res.message !== "jwt expired") return await Promise.reject(res);
+    const updateTokensResponse = await this.refreshToken(refreshToken);
 
-    const updateTokensRes = await this.refreshToken(refreshToken);
+    if (!updateTokensResponse || !updateTokensResponse.success) return Promise.reject(updateTokensResponse);
 
-    if (updateTokensRes && updateTokensRes.success) {
+    saveTockensCallback({ ...updateTokensResponse });
 
-      saveTockensCallback(updateTokensRes.accessToken, updateTokensRes.refreshToken);
-
-      return this._request(endpoint, method, body, updateTokensRes.accessToken);
-
-    }
-
-    return await Promise.reject(updateTokensRes);
+    return this._request(endpoint, method, body, updateTokensResponse.accessToken);
 
   }
 
   getIngridients = () => this._request("ingredients");
 
   getIngridientsTypes = async () => {
-    return await new Promise(resolve =>
-      resolve({
-        success: true,
-        data: [
-          { id: "bun", name: "Булки" },
-          { id: "sauce", name: "Соусы" },
-          { id: "main", name: "Начинки" },
-        ],
-      })
-    );
+    return Promise.resolve({
+      success: true,
+      data: [
+        { id: "bun", name: "Булки" },
+        { id: "sauce", name: "Соусы" },
+        { id: "main", name: "Начинки" },
+      ],
+    })
   };
 
   makeOrder = (ingridients, accessToken) => this._request("orders", "POST", ingridients, accessToken);

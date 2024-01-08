@@ -115,7 +115,7 @@ export const authenticationReducer = (state = initialState, action) => {
     case SET_USER_PROFILE: {
       return {
         ...state,
-        userProfile: action.payload,
+        userProfile: {...action.payload},
       }
     }
     case RESET_USER_PROFILE: {

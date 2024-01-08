@@ -79,7 +79,7 @@ export const passwordResetFailed = () => ({
 export const SET_USER_PROFILE = "SET_USER_PROFILE";
 export const setUserProfile = (userProfile) => ({
   type: SET_USER_PROFILE,
-  payload: userProfile,
+  payload: {...userProfile},
 });
 
 export const RESET_USER_PROFILE = "RESET_USER_PROFILE";
@@ -107,14 +107,9 @@ export const registerUserProfile = ({ name, email, password }) => {
     dispatch(registerUserRequest());
     return Api.registerUser({ name, email, password })
       .then((res) => {
-        if (res && res.success) {
-          setTokens(res);
-          dispatch(registerUserSuccess());
-          dispatch(setUserProfile(res.user));
-        } else {
-          dispatch(registerUserFailed());
-          dispatch(resetUserProfile());
-        }
+        setTokens(res);
+        dispatch(registerUserSuccess());
+        dispatch(setUserProfile(res.user));
       })
       .catch((err) => {
         console.log(err);
@@ -129,14 +124,9 @@ export const loginUser = ({ email, password }) => {
     dispatch(loginUserRequest());
     return Api.loginUser({ email, password })
       .then((res) => {
-        if (res && res.success) {
-          setTokens(res);
-          dispatch(loginUserSuccess());
-          dispatch(setUserProfile(res.user));
-        } else {
-          dispatch(loginUserFailed());
-          dispatch(resetUserProfile());
-        }
+        setTokens(res);
+        dispatch(loginUserSuccess());
+        dispatch(setUserProfile(res.user));
       })
       .catch((err) => {
         console.log(err);
@@ -171,13 +161,7 @@ export const passwordRecovery = ({ email }) => {
   return (dispatch) => {
     dispatch(passwordRecoveryRequest());
     return Api.passwordRecovery(email)
-      .then((res) => {
-        if (res && res.success) {
-          dispatch(passwordRecoverSuccess());
-        } else {
-          dispatch(passwordRecoveryFailed());
-        }
-      })
+      .then((res) => dispatch(passwordRecoverSuccess()))
       .catch((err) => {
         console.log(err);
         dispatch(passwordRecoveryFailed());
@@ -190,13 +174,7 @@ export const passwordReset = ({ password, token }) => {
   return (dispatch) => {
     dispatch(passwordResetRequest());
     return Api.passwordReset(password, token)
-      .then((res) => {
-        if (res && res.success) {
-          dispatch(passwordResetSuccess());
-        } else {
-          dispatch(passwordResetFailed());
-        }
-      })
+      .then(() => dispatch(passwordResetSuccess()))
       .catch((err) => {
         console.log(err);
         dispatch(passwordResetFailed());
@@ -207,67 +185,51 @@ export const passwordReset = ({ password, token }) => {
 
 export const autoLoginUser = () => {
   return (dispatch) => {
+
     dispatch(loginUserRequest());
+
     const { refreshToken } = getTokens();
-    if (refreshToken) {
-      return Api.refreshToken(refreshToken)
-        .then((res) => {
-          if (res && res.success) {
-            dispatch(loginUserSuccess());
-            setTokens(res);
-          } else {
-            dispatch(loginUserFailed());
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          dispatch(loginUserFailed);
-        })
-    } else {
-      return Promise.reject({ success: false, message: "You are not authorized" });
-    }
+    if (!refreshToken) return Promise.reject({ success: false, message: "You are not authorized" });
+
+    return Api.refreshToken(refreshToken)
+      .then((res) => {
+        dispatch(loginUserSuccess());
+        setTokens(res);
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(loginUserFailed);
+      })
   }
 }
 
 export const getUserProfile = () => {
   return (dispatch) => {
     const { accessToken } = getTokens();
-    if (accessToken) {
-      return Api.getUserProfile(accessToken)
-        .then((res) => {
-          if (res && res.success) {
-            dispatch(setUserProfile(res.user));
-          } else {
-            dispatch(resetUserProfile());
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          dispatch(resetUserProfile());
-        })
-    } else {
+    if (!accessToken) {
       dispatch(resetUserProfile());
       return Promise.reject({ success: false, message: "You are not authorized" });
-    }
+    };
+
+    return Api.getUserProfile(accessToken)
+      .then((res) => { 
+        dispatch(setUserProfile(res.user));
+       })
+      .catch ((err) => {
+  console.log(err);
+  dispatch(resetUserProfile());
+});
   }
 }
 
 export const updateUserProfile = (userProfile) => {
   return (dispatch) => {
     const { accessToken, refreshToken } = getTokens();
-    if (accessToken && refreshToken) {
-      return Api.updateUserProfile(userProfile, accessToken, refreshToken, setTokens)
-        .then((res) => {
-          if (res && res.success) {
-            dispatch(setUserProfile(res.user));
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-    } else {
-      return Promise.reject({ success: false, message: "You are not authorized" });
-    }
+    if (!accessToken || !refreshToken) return Promise.reject({ success: false, message: "You are not authorized" });
+
+    return Api.updateUserProfile(userProfile, accessToken, refreshToken, setTokens)
+      .then((res) => dispatch(setUserProfile(res.user)))
+      .catch((err) => console.log(err));
   }
 }
 

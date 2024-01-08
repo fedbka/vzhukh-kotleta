@@ -1,6 +1,6 @@
+import propTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 import styles from "./profile-navigation.module.css";
-
 
 const ProfileNavigation = ({ pageAnnotation }) => {
   const navLinkInactiveCSS = `text text_type_main-medium text_color_inactive ${styles.link}`;
@@ -21,6 +21,10 @@ const ProfileNavigation = ({ pageAnnotation }) => {
       <span className={pageAnnotationCSS}>{pageAnnotation}</span>
     </div>
   );
+};
+
+ProfileNavigation.propTypes = {
+  pageAnnotation: propTypes.any,
 };
 
 export default ProfileNavigation;
