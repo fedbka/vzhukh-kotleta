@@ -8,8 +8,8 @@ import {
 const initialState = {
   items: [],
   currentItem: {},
-  requested: false,
-  requestFailed: false,
+  isFetching: false,
+  itemsLoaded: false,
 };
 
 export const ingridientsTypesReducer = (state = initialState, action) => {
@@ -17,27 +17,28 @@ export const ingridientsTypesReducer = (state = initialState, action) => {
     case GET_INGRIDIENTS_TYPES_REQUEST: {
       return {
         ...initialState,
-        requested: true,
+        isFetching: true,
+        itemsLoaded: false,
       }
     }
     case GET_INGRIDIENTS_TYPES_SUCCESS: {
       return {
         ...state,
-        items: action.items,
-        requested: false,
+        items: action.payload.ingridientsTypes,
+        isFetching: false,
+        itemsLoaded: true,
       }
     }
     case GET_INGRIDIENTS_TYPES_FAILED: {
       return {
         ...state,
-        requested: false,
-        requestFailed: true,
+        isFetching: false,
       }
     }
     case SET_CURRENT_INGRIDIENTS_TYPE: {
       return {
         ...state,
-        currentItem: { ...action.item }
+        currentItem: { ...action.payload.ingridientsType }
       }
     }
     default: {

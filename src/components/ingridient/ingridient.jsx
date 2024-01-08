@@ -1,42 +1,35 @@
-import {
-  Counter,
-  CurrencyIcon,
-} from "@ya.praktikum/react-developer-burger-ui-components";
+import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import propTypes from "prop-types";
 import { useDrag } from "react-dnd";
+import { Link, useLocation } from "react-router-dom";
 import styles from "./ingridient.module.css";
 
-const Ingridient = ({ ingridient, ingridientOnClick }) => {
+const Ingridient = ({ ingridient }) => {
+  const location = useLocation();
   const [, dragRef] = useDrag({
     type: "ingridient",
     item: { ...ingridient },
   });
   return (
-    <div
+    <Link
       className={styles.card}
-      onClick={() => ingridientOnClick(ingridient)}
+      to={`/ingridients/${ingridient._id}`}
+      state={{background: location}}
       ref={dragRef}
     >
       {ingridient.__v !== 0 && <Counter count={ingridient.__v} />}
-      <img
-        className={styles.image}
-        src={ingridient.image}
-        alt={ingridient.name}
-      />
+      <img className={styles.image} src={ingridient.image} alt={ingridient.name} />
       <div className={`${styles.price} pt-2 pb-2`}>
         <span className="text text_type_main-medium">{ingridient.price}</span>
         <CurrencyIcon />
       </div>
-      <p className={`text text_type_main-default ${styles.title}`}>
-        {ingridient.name}
-      </p>
-    </div>
+      <p className={`text text_type_main-default ${styles.title}`}>{ingridient.name}</p>
+    </Link>
   );
 };
 
 Ingridient.propTypes = {
   ingridient: propTypes.object.isRequired,
-  ingridientOnClick: propTypes.func,
 };
 
 export default Ingridient;

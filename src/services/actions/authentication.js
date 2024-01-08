@@ -76,22 +76,30 @@ export const passwordResetFailed = () => ({
   type: PASSWORD_RESET_FAILED,
 });
 
-export const SET_USER_AUTHENTICATED = "SET_USER_AUTHENTICATED";
 export const SET_USER_PROFILE = "SET_USER_PROFILE";
-export const RESET_USER_PROFILE = "RESET_USER_PROFILE";
-
-export const setUserAuthenticated = (value) => ({
-  type: SET_USER_AUTHENTICATED,
-  payload: value,
-});
-
 export const setUserProfile = (userProfile) => ({
   type: SET_USER_PROFILE,
   payload: userProfile,
 });
 
+export const RESET_USER_PROFILE = "RESET_USER_PROFILE";
 export const resetUserProfile = () => ({
   type: RESET_USER_PROFILE,
+});
+
+export const UPDATE_USER_PROFILE_REQUEST = "UPDATE_USER_PROFILE_REQUEST";
+export const updateUserProfileRequest = () => ({
+  type: UPDATE_USER_PROFILE_REQUEST,
+});
+
+export const UPDATE_USER_PROFILE_SUCCESS = "UPDATE_USER_PROFILE_SUCCESS";
+export const updateUserProfileSuccess = () => ({
+  type: UPDATE_USER_PROFILE_SUCCESS,
+});
+
+export const UPDATE_USER_PROFILE_FAILED = "UPDATE_USER_PROFILE_SUCCESS";
+export const updateUserProfileFailed = () => ({
+  type: UPDATE_USER_PROFILE_FAILED,
 });
 
 export const registerUserProfile = ({ name, email, password }) => {
@@ -99,14 +107,19 @@ export const registerUserProfile = ({ name, email, password }) => {
     dispatch(registerUserRequest());
     return Api.registerUser({ name, email, password })
       .then((res) => {
-        localStorage.setItem("accessToken", res.accessToken);
-        localStorage.setItem("refreshToken", res.refreshToken);
-        dispatch(registerUserSuccess());
-        dispatch(setUserProfile(res.user));
+        if (res && res.success) {
+          setTokens(res);
+          dispatch(registerUserSuccess());
+          dispatch(setUserProfile(res.user));
+        } else {
+          dispatch(registerUserFailed());
+          dispatch(resetUserProfile());
+        }
       })
       .catch((err) => {
-        dispatch(registerUserFailed());
         console.log(err);
+        dispatch(registerUserFailed());
+        dispatch(resetUserProfile());
       });
   };
 }
@@ -116,13 +129,19 @@ export const loginUser = ({ email, password }) => {
     dispatch(loginUserRequest());
     return Api.loginUser({ email, password })
       .then((res) => {
-        localStorage.setItem("accessToken", res.accessToken);
-        localStorage.setItem("refreshToken", res.refreshToken);
-        dispatch(loginUserSuccess());
-        dispatch(setUserProfile(res.user));
+        if (res && res.success) {
+          setTokens(res);
+          dispatch(loginUserSuccess());
+          dispatch(setUserProfile(res.user));
+        } else {
+          dispatch(loginUserFailed());
+          dispatch(resetUserProfile());
+        }
       })
       .catch((err) => {
+        console.log(err);
         dispatch(loginUserFailed());
+        dispatch(resetUserProfile());
       });
   }
 
@@ -131,18 +150,18 @@ export const loginUser = ({ email, password }) => {
 export const logoutUser = () => {
   return (dispatch) => {
     dispatch(logoutUserRequest());
-    return Api.logoutUser(localStorage.getItem("refreshToken"))
+    const { refreshToken } = getTokens();
+    return Api.logoutUser(refreshToken)
       .then((res) => {
-        console.log(res);
         dispatch(logoutUserSuccess());
         dispatch(resetUserProfile());
       })
       .catch((err) => {
+        console.log(err);
         dispatch(logoutUserFailed());
       })
       .finally(() => {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
+        eraseTokens();
       });
   }
 
@@ -150,14 +169,18 @@ export const logoutUser = () => {
 
 export const passwordRecovery = ({ email }) => {
   return (dispatch) => {
-    dispatch(passwordResetRequest());
+    dispatch(passwordRecoveryRequest());
     return Api.passwordRecovery(email)
       .then((res) => {
-        console.log(res);
-        dispatch(passwordResetSuccess());
+        if (res && res.success) {
+          dispatch(passwordRecoverSuccess());
+        } else {
+          dispatch(passwordRecoveryFailed());
+        }
       })
       .catch((err) => {
-        dispatch(passwordResetFailed());
+        console.log(err);
+        dispatch(passwordRecoveryFailed());
       });
   }
 
@@ -166,10 +189,13 @@ export const passwordRecovery = ({ email }) => {
 export const passwordReset = ({ password, token }) => {
   return (dispatch) => {
     dispatch(passwordResetRequest());
-    return Api.passwordReset( password, token )
+    return Api.passwordReset(password, token)
       .then((res) => {
-        console.log(res);
-        dispatch(passwordResetSuccess());
+        if (res && res.success) {
+          dispatch(passwordResetSuccess());
+        } else {
+          dispatch(passwordResetFailed());
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -179,3 +205,82 @@ export const passwordReset = ({ password, token }) => {
 
 }
 
+export const autoLoginUser = () => {
+  return (dispatch) => {
+    dispatch(loginUserRequest());
+    const { refreshToken } = getTokens();
+    if (refreshToken) {
+      return Api.refreshToken(refreshToken)
+        .then((res) => {
+          if (res && res.success) {
+            dispatch(loginUserSuccess());
+            setTokens(res);
+          } else {
+            dispatch(loginUserFailed());
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          dispatch(loginUserFailed);
+        })
+    } else {
+      return Promise.reject({ success: false, message: "You are not authorized" });
+    }
+  }
+}
+
+export const getUserProfile = () => {
+  return (dispatch) => {
+    const { accessToken } = getTokens();
+    if (accessToken) {
+      return Api.getUserProfile(accessToken)
+        .then((res) => {
+          if (res && res.success) {
+            dispatch(setUserProfile(res.user));
+          } else {
+            dispatch(resetUserProfile());
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          dispatch(resetUserProfile());
+        })
+    } else {
+      dispatch(resetUserProfile());
+      return Promise.reject({ success: false, message: "You are not authorized" });
+    }
+  }
+}
+
+export const updateUserProfile = (userProfile) => {
+  return (dispatch) => {
+    const { accessToken, refreshToken } = getTokens();
+    if (accessToken && refreshToken) {
+      return Api.updateUserProfile(userProfile, accessToken, refreshToken, setTokens)
+        .then((res) => {
+          if (res && res.success) {
+            dispatch(setUserProfile(res.user));
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    } else {
+      return Promise.reject({ success: false, message: "You are not authorized" });
+    }
+  }
+}
+
+export const getTokens = () => {
+  return {
+    accessToken: localStorage.getItem('accessToken'),
+    refreshToken: localStorage.getItem('refreshToken'),
+  }
+}
+
+export const setTokens = ({ accessToken, refreshToken }) => {
+  accessToken ? localStorage.setItem("accessToken", accessToken) : localStorage.removeItem("accessToken");
+  refreshToken ? localStorage.setItem("refreshToken", refreshToken) : localStorage.removeItem("refreshToken");
+}
+
+export const eraseTokens = () => setTokens({ accessToken: '', refreshToken: '' });

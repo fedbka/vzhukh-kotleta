@@ -9,8 +9,8 @@ import {
 
 const initialState = {
   items: [],
-  itemsRequest: false,
-  itemsFailed: false,
+  isFetching: false,
+  itemsLoaded: false,
 };
 
 export const ingridientsReducer = (state = initialState, action) => {
@@ -19,32 +19,32 @@ export const ingridientsReducer = (state = initialState, action) => {
       return {
         ...state,
         items: initialState.items,
-        itemsRequest: true,
-        itemsFailed: false,
+        isFetching: true,
+        itemsLoaded: false,
       }
     }
     case GET_INGRIDIENTS_SUCCESS: {
       return {
         ...state,
-        items: action.items,
-        itemsRequest: false,
+        items: action.payload.ingridients,
+        isFetching: false,
+        itemsLoaded: true,
       }
     }
     case GET_INGRIDIENTS_FAILED: {
       return {
         ...state,
-        itemsRequest: false,
-        itemsFailed: true,
+        isFetching: false,
       }
     }
     case INCREASE_INGRIDIENT_QUANTITY: {
       return {
         ...state,
         items: [...state.items.map(item => {
-          if (action.item.type === 'bun') {
-            return item._id === action.item._id ? { ...item, __v: 2 } : item.type === 'bun' ? { ...item, __v: 0 } : { ...item };
+          if (action.payload.ingridient.type === 'bun') {
+            return item._id === action.payload.ingridient._id ? { ...item, __v: 2 } : item.type === 'bun' ? { ...item, __v: 0 } : { ...item };
           } else {
-            return item._id === action.item._id ? { ...item, __v: item.__v + 1 } : item;
+            return item._id === action.payload.ingridient._id ? { ...item, __v: item.__v + action.payload.quantity } : item;
           }
         })],
       }
@@ -52,7 +52,7 @@ export const ingridientsReducer = (state = initialState, action) => {
     case DECREASE_INGRIDIENT_QUANTITY: {
       return {
         ...state,
-        items: [...state.items.map(item => item._id === action.item._id ? { ...item, __v: item.__v - 1 } : item)],
+        items: [...state.items.map(item => item._id === action.payload.ingridient._id ? { ...item, __v: item.__v - action.payload.quantity } : item)],
       }
     }
     case RESET_INGRIDIENT_QUANTITY: {

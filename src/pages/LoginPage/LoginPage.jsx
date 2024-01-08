@@ -1,13 +1,15 @@
 import { Button, EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
-import styles from "./LoginPage.module.css";
-import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/actions/authentication";
+import styles from "./LoginPage.module.css";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const OnChangeValuesHandler = (event) => {
     setFormData((previousProfileData) => ({
@@ -18,15 +20,17 @@ const LoginPage = () => {
 
   const onSubmitFormHandler = (event) => {
     event.preventDefault();
-    dispatch(loginUser(formData));
-  }
+    dispatch(loginUser(formData)).then(() => {
+      location.state && location.state.from && navigate(location.state.from);
+    });
+  };
 
   return (
     <main className={styles.page}>
       <h1 className="pt-0 pb-0 text text_type_main-large">Вход</h1>
       <form className={styles.form} onSubmit={onSubmitFormHandler} autoComplete="off">
-        <EmailInput name="email" value={formData.email} onChange={OnChangeValuesHandler} autoComplete="off"/>
-        <PasswordInput name="password" value={formData.password} onChange={OnChangeValuesHandler} autoComplete="off"/>
+        <EmailInput name="email" value={formData.email} onChange={OnChangeValuesHandler} autoComplete="off" />
+        <PasswordInput name="password" value={formData.password} onChange={OnChangeValuesHandler} autoComplete="off" />
         <Button htmlType="submit" type="primary" extraClass={styles.submitButton}>
           Войти
         </Button>

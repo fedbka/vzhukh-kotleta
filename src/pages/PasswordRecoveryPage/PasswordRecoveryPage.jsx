@@ -2,7 +2,7 @@ import { Button, EmailInput } from "@ya.praktikum/react-developer-burger-ui-comp
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { passwordRecovery, passwordReset } from "../../services/actions/authentication";
+import { passwordRecovery } from "../../services/actions/authentication";
 import styles from "./PasswordRecoveryPage.module.css";
 
 const PasswordRecoveryPage = () => {

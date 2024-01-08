@@ -13,7 +13,7 @@ const AppHeader = () => {
         <NavigationLink Icon={Logo} link="/" text="" />
       </nav>
       <nav className={styles.nav}>
-        <NavigationLink Icon={ProfileIcon} link="/forgot-password" text="Личный кабинет" />
+        <NavigationLink Icon={ProfileIcon} link="/profile" text="Личный кабинет" />
       </nav>
     </header>
   );

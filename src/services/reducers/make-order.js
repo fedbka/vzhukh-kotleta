@@ -23,8 +23,8 @@ export const orderReducer = (state = initialState, action) => {
     case MAKE_ORDER_SUCCESS: {
       return {
         ...state,
-        description: action.data.description,
-        number: action.data.number,
+        description: action.payload.description,
+        number: action.payload.number,
         items: action.items,
         requested: false,
       }

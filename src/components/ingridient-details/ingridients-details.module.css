@@ -8,9 +8,10 @@
 .title {
     display: flex;
     align-items: center;
+    text-align: center;
     margin: 0;
     padding: 0;
-    min-width: 640px;
+    max-width: 640px;
     min-height: 64px;
 }
 
@@ -23,7 +24,7 @@
 }
 
 .name {
-    min-width: 520px;
+    max-width: 520px;
     min-height: 30px;
 }
 

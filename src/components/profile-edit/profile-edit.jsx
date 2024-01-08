@@ -1,17 +1,13 @@
-import {
-  Button,
-  EmailInput,
-  Input,
-  PasswordInput,
-} from "@ya.praktikum/react-developer-burger-ui-components";
+import { Button, EmailInput, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserProfile } from "../../services/actions/authentication";
 import styles from "./profile-edit.module.css";
-import { useSelector } from "react-redux";
 
 const ProfileEdit = () => {
   const userProfile = useSelector((state) => state.authentication.userProfile);
-
-  const [formData, setformData] = useState({ ...userProfile });
+  const [formData, setformData] = useState({ ...userProfile, password: "" });
+  const dispatch = useDispatch();
 
   const OnChangeValuesHandler = useCallback((event) => {
     setformData((previousformData) => ({
@@ -20,33 +16,30 @@ const ProfileEdit = () => {
     }));
   }, []);
 
-  const ResetChanges = useCallback(() => setformData({ ...userProfile }), [userProfile]);
+  const onSubmitForm = (event) => {
+    event.preventDefault();
+    dispatch(updateUserProfile(formData));
+  };
+
+  const ResetChanges = useCallback(() => setformData({ ...userProfile, password: "" }), [userProfile]);
 
   return (
     <div className={styles.main}>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={onSubmitForm}>
         <Input
           name="name"
           value={formData.name}
           onChange={OnChangeValuesHandler}
           type="text"
           placeholder="Имя"
-          icon={
-            formData.name !== userProfile.name
-              ? "CloseIcon"
-              : "EditIcon"
-          }
+          icon={formData.name !== userProfile.name ? "CloseIcon" : "EditIcon"}
         />
         <EmailInput
           name="email"
           value={formData.email}
           onChange={OnChangeValuesHandler}
           placeholder="Логин"
-          icon={
-            formData.email !== userProfile.email
-              ? "CloseIcon"
-              : "EditIcon"
-          }
+          icon={formData.email !== userProfile.email ? "CloseIcon" : "EditIcon"}
         />
         <PasswordInput
           name="password"
