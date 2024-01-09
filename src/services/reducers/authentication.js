@@ -33,7 +33,6 @@ export const authenticationReducer = (state = initialState, action) => {
       return {
         ...state,
         isFetching: true,
-        userAuthenticated: false,
       }
     }
     case LOGIN_USER_SUCCESS: {

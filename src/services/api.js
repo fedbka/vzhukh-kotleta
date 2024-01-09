@@ -42,11 +42,10 @@ class vzukhKotletaApi {
     if (method !== "GET" && body) params.body = JSON.stringify(body);
 
     const response = await fetch(`${this._config.BASE_URL}/${endpoint}`, params);
-    
-    if (!response.ok) return await Promise.reject(response);
+        if (!response.ok) return await Promise.reject(response);
     
     const json = await response.json();
-    if (json && json.success) return response;
+    if (json && json.success) return json;
 
     if (json.message !== "jwt expired") return Promise.reject(json);
 

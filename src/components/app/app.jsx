@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ConstructorPage from "../../pages/ConstructorPage/ConstructorPage";
@@ -24,11 +24,10 @@ const App = () => {
 
   useEffect(() => {
     dispatch(autoLoginUser())
-      .then(() => dispatch(getUserProfile()))
-      .catch((err) => console.log(err));
+    .catch((err) => {});
   }, [dispatch]);
 
-  const onCloseHandler = () => navigate(-1);
+  const onCloseHandler = useCallback(() => navigate(-1), [navigate]);
 
   return (
     <div>
