@@ -1,0 +1,12 @@
+.navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    max-width: 320px;
+}
+
+.link {
+    min-height: 64px;
+    text-decoration: none;
+}

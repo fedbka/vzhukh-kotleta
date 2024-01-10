@@ -1,54 +1,97 @@
-const baseUrl = "https://norma.nomoreparties.space/api";
+const BASE_URL = "https://norma.nomoreparties.space/api";
 
-class IngridientsApi {
+class vzukhKotletaApi {
 
-  constructor(baseUrl, authorizationToken = '') {
+  constructor(BASE_URL) {
 
-    this._baseUrl = baseUrl;
-    this._authorizationToken = authorizationToken;
+    this._BASE_URL = BASE_URL;
     this._config = {
-      baseUrl: baseUrl,
+      BASE_URL: BASE_URL,
       headers: {
-        ...(this._authorizationToken ? { 'authorization': this._authorizationToken } : {}),
-        'Content-Type': 'application/json; charset=utf-8',
+        "Content-Type": "application/json; charset=utf-8",
       }
     }
   }
 
-  _request = async (endpoint, method = 'GET', body = '') => {
+  _request = async (endpoint, method = "GET", body = "", accessToken = "") => {
 
     const params = {
-      'method': method,
-      'headers': this._config.headers,
+      "method": method,
+      "headers": { ...this._config.headers, ...(accessToken ? { "authorization": accessToken } : {}) },
     }
 
-    if (method !== 'GET' && body) params.body = JSON.stringify(body);
+    if (method !== "GET" && body) params.body = JSON.stringify(body);
 
-    const res = await fetch(`${this._config.baseUrl}/${endpoint}`, params);
-    if (res.ok) return res.json();
-    return await Promise.reject(res);
+    const response = await fetch(`${this._config.BASE_URL}/${endpoint}`, params);
+    if (!response.ok) return await Promise.reject(response);
+
+    const json = await response.json();
+    if (!json || !json.success) return Promise.reject(json);
+
+    return json;
+
   }
 
-  getIngridients = () => this._request('ingredients');
-  
+  _requestWithRefesh = async (endpoint, method = "GET", body = "", accessToken = "", refreshToken = "", saveTockensCallback = null) => {
+
+    const params = {
+      "method": method,
+      "headers": { ...this._config.headers, ...(accessToken ? { "authorization": accessToken } : {}) },
+    }
+
+    if (method !== "GET" && body) params.body = JSON.stringify(body);
+
+    const response = await fetch(`${this._config.BASE_URL}/${endpoint}`, params);
+        if (!response.ok) return await Promise.reject(response);
+    
+    const json = await response.json();
+    if (json && json.success) return json;
+
+    if (json.message !== "jwt expired") return Promise.reject(json);
+
+    const updateTokensResponse = await this.refreshToken(refreshToken);
+
+    if (!updateTokensResponse || !updateTokensResponse.success) return Promise.reject(updateTokensResponse);
+
+    saveTockensCallback({ ...updateTokensResponse });
+
+    return this._request(endpoint, method, body, updateTokensResponse.accessToken);
+
+  }
+
+  getIngridients = () => this._request("ingredients");
+
   getIngridientsTypes = async () => {
-    return await new Promise(resolve =>
-      setTimeout(() =>
-        resolve({
-          success: true,
-          data: [
-            { id: "bun", name: "Булки" },
-            { id: "sauce", name: "Соусы" },
-            { id: "main", name: "Начинки" },
-          ],
-        }), 100)
-    );
+    return Promise.resolve({
+      success: true,
+      data: [
+        { id: "bun", name: "Булки" },
+        { id: "sauce", name: "Соусы" },
+        { id: "main", name: "Начинки" },
+      ],
+    })
   };
-  
-  makeOrder = (ingridients) => this._request('orders', 'POST', ingridients);
+
+  makeOrder = (ingridients, accessToken) => this._request("orders", "POST", ingridients, accessToken);
+
+  registerUser = (userProfile) => this._request("auth/register", "POST", userProfile);
+
+  loginUser = (userProfile) => this._request("auth/login", "POST", userProfile);
+
+  logoutUser = (refreshToken) => this._request("auth/logout", "POST", { token: refreshToken });
+
+  passwordRecovery = (email) => this._request("password-reset", "POST", { email });
+
+  passwordReset = (password, token) => this._request("password-reset/reset", "POST", { password, token })
+
+  refreshToken = (refreshToken) => this._request("auth/token", "POST", { token: refreshToken });
+
+  getUserProfile = (accessToken) => this._request("auth/user", "GET", {}, accessToken);
+
+  updateUserProfile = (userProfile, accessToken, refreshToken, saveTockensCallback) => this._requestWithRefesh("auth/user", "PATCH", { ...userProfile }, accessToken, refreshToken, saveTockensCallback);
 
 }
 
-const ingridientsApi = new IngridientsApi(baseUrl);
+const Api = new vzukhKotletaApi(BASE_URL);
 
-export default ingridientsApi;
+export default Api;

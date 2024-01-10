@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux';
-import { ingridientsReducer } from './ingridients';
-import { ingridientsTypesReducer } from './ingridient-types';
 import { chosenIngridientsReducer } from './chosen-ingridients';
+import { ingridientsTypesReducer } from './ingridient-types';
+import { ingridientsReducer } from './ingridients';
 import { orderReducer } from './make-order';
-import { selectedIngridientReducer } from './selected-ingridient';
+import { authenticationReducer } from './authentication';
 
 export const rootReducer = combineReducers({
     ingridients: ingridientsReducer,
     ingridientsTypes: ingridientsTypesReducer,
     chosenIngridients: chosenIngridientsReducer,
     order: orderReducer,
-    selectedIngridient: selectedIngridientReducer,
+    authentication: authenticationReducer,
 });

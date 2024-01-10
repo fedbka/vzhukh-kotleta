@@ -1,28 +1,22 @@
-import React from "react";
-import styles from "./app-header.module.css";
-import {
-  Logo,
-  BurgerIcon,
-  ProfileIcon,
-  ListIcon,
-} from "@ya.praktikum/react-developer-burger-ui-components";
+import { BurgerIcon, ListIcon, Logo, ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import NavigationLink from "../navigation-link/navigation-link";
+import styles from "./app-header.module.css";
 
-function AppHeader() {
+const AppHeader = () => {
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>
-        <NavigationLink Icon={BurgerIcon} text="Конструктор" active={true} />
-        <NavigationLink Icon={ListIcon} text="Лента заказов" />
+        <NavigationLink Icon={BurgerIcon} link="/" text="Конструктор" />
+        <NavigationLink Icon={ListIcon} link="/feed" text="Лента заказов" />
       </nav>
       <nav className={styles.nav_type_logo}>
-        <NavigationLink Icon={Logo} text="" link="#" />
+        <NavigationLink Icon={Logo} link="/" text="" />
       </nav>
       <nav className={styles.nav}>
-        <NavigationLink Icon={ProfileIcon} text="Личный кабинет" />
+        <NavigationLink Icon={ProfileIcon} link="/profile" text="Личный кабинет" />
       </nav>
     </header>
   );
-}
+};
 
 export default AppHeader;

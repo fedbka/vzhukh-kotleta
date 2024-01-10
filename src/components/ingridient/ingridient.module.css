@@ -4,6 +4,8 @@
     position: relative;
     max-width: 272px;
     min-height: 208px;
+    text-decoration: none;
+    color: white;
 }
 
 .card:hover {

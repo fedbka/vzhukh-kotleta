@@ -1,36 +1,25 @@
-import {
-  Button,
-  ConstructorElement,
-  CurrencyIcon,
-  DragIcon,
-} from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useMemo } from "react";
+import { Button, ConstructorElement, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useMemo, useState } from "react";
 import { useDrop } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  ADD_CHOSEN_INGRIDIENT,
-  DELETE_CHOSEN_INGRIDIENT,
-} from "../../services/actions/chosen-ingridients";
-import {
-  DECREASE_INGRIDIENT_QUANTITY,
-  INCREASE_INGRIDIENT_QUANTITY,
-} from "../../services/actions/ingridients";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import { ADD_CHOSEN_INGRIDIENT, DELETE_CHOSEN_INGRIDIENT } from "../../services/actions/chosen-ingridients";
+import { decreaseIngridientQuantity, increaseIngridientQuantity } from "../../services/actions/ingridients";
 import { makeOrder } from "../../services/actions/make-order";
+import DragabbleWrapper from "../dragabbleWrapper/dragabble-wrapper";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import styles from "./burger-constructor.module.css";
-import DragabbleWrapper from "../dragabbleWrapper/dragabble-wrapper";
-import { v4 as uuidv4 } from 'uuid';
 
-function BurgerConstructor() {
+const BurgerConstructor = () => {
   const chosenIngridients = useSelector((store) => store.chosenIngridients);
-  const [showModal, setShowModal] = React.useState(false);
-
+  const [showModal, setShowModal] = useState(false);
+  const userAuthenticated = useSelector((store) => store.authentication.userAuthenticated);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const bunIngridient = chosenIngridients.items.find(
-    (ingridient) => ingridient.type === "bun"
-  );
+  const bunIngridient = chosenIngridients.items.find((ingridient) => ingridient.type === "bun");
 
   const [, dropTarget] = useDrop({
     accept: "ingridient",
@@ -39,41 +28,36 @@ function BurgerConstructor() {
         type: ADD_CHOSEN_INGRIDIENT,
         item: { ...ingridient, uuid: uuidv4() },
       });
-      dispatch({
-        type: INCREASE_INGRIDIENT_QUANTITY,
-        item: { ...ingridient },
-      });
+      dispatch(increaseIngridientQuantity(ingridient));
     },
   });
 
   const orderSumm = useMemo(
     () =>
       chosenIngridients.items.reduce(
-        (prev, ingridient) =>
-          prev + (ingridient.type === "bun" ? 2 : 1) * ingridient.price,
+        (prev, ingridient) => prev + (ingridient.type === "bun" ? 2 : 1) * ingridient.price,
         0
       ),
     [chosenIngridients]
   );
 
-  const deleteChosenIgridient = function (ingridient) {
+  const deleteChosenIgridient = (ingridient) => {
     dispatch({
       type: DELETE_CHOSEN_INGRIDIENT,
       item: { ...ingridient },
     });
-    dispatch({
-      type: DECREASE_INGRIDIENT_QUANTITY,
-      item: { ...ingridient },
-    });
+    dispatch(decreaseIngridientQuantity(ingridient));
   };
 
   const makeNewOrder = () => {
+    if (!userAuthenticated) {
+      navigate("/login");
+      return;
+    }
     setShowModal(true);
     dispatch(
       makeOrder({
-        ingredients: [
-          ...chosenIngridients.items.map((ingridient) => ingridient._id),
-        ],
+        ingredients: [...chosenIngridients.items.map((ingridient) => ingridient._id)],
       })
     );
   };
@@ -101,9 +85,7 @@ function BurgerConstructor() {
             .filter((ingridient) => ingridient.type !== "bun")
             .map((ingridient) => (
               <DragabbleWrapper item={ingridient} key={ingridient.uuid}>
-                <li
-                  className={styles.filling_ingridients_item}
-                >
+                <li className={styles.filling_ingridients_item}>
                   <DragIcon />
                   <ConstructorElement
                     text={ingridient.name}
@@ -143,6 +125,6 @@ function BurgerConstructor() {
       </section>
     </>
   );
-}
+};
 
 export default BurgerConstructor;

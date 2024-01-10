@@ -1,0 +1,39 @@
+.page {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 60px;
+    text-align: center;
+    margin: 120px auto;
+    max-width: 1240px;
+}
+
+.navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    max-width: 320px;
+}
+
+.form {
+    max-width: 480px;
+    margin: 0;
+    padding-bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.submitButton {
+    max-width: 167px;
+}
+
+
+.additionalActions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}

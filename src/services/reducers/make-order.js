@@ -1,7 +1,7 @@
 import {
+  MAKE_ORDER_FAILED,
   MAKE_ORDER_REQUEST,
   MAKE_ORDER_SUCCESS,
-  MAKE_ORDER_FAILED,
 } from '../actions/make-order';
 
 const initialState = {
@@ -23,8 +23,8 @@ export const orderReducer = (state = initialState, action) => {
     case MAKE_ORDER_SUCCESS: {
       return {
         ...state,
-        description: action.data.description,
-        number: action.data.number,
+        description: action.payload.description,
+        number: action.payload.number,
         items: action.items,
         requested: false,
       }
@@ -41,4 +41,5 @@ export const orderReducer = (state = initialState, action) => {
     }
   }
 }
+
 
