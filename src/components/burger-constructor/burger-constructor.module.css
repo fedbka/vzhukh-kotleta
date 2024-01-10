@@ -1,52 +1,62 @@
 .component {
-    display: flex;
-    flex-direction: column;
-    max-width: 600px;
-    width: 100%;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  width: 100%;
+  align-items: center;
 }
 
 .filling_ingridients {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 16px;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    overflow-y: scroll;
-    height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: scroll;
+  height: 40vh;
 }
 
 .filling_ingridients::-webkit-scrollbar {
-    width: 8px;
+  width: 8px;
 }
 
 .filling_ingridients::-webkit-scrollbar-thumb {
-    background-color: #8585ad;
+  background-color: #8585ad;
 }
 
 .filling_ingridients_item {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    justify-content: flex-start;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .accept_order {
-    display: flex;
-    justify-content: flex-end;
-    flex-direction: row;
-    width: 100%;
-    gap: 40px;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  width: 100%;
+  gap: 40px;
+  composes: mt-6 mr-15 from global;
 }
 
 .totals {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 9.5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 9.5px;
+  composes: text text_type_digits-medium from global;  
+}
+
+.constructorElementTop {
+  composes: ml-1 mt-25 mb-4 from global;
+}
+
+.constructorElementBottom {
+  composes: ml-1 mt-4 mb-4 from global;
 }

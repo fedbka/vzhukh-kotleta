@@ -200,6 +200,7 @@ export const autoLoginUser = () => {
       .catch((err) => {
         console.log(err);
         dispatch(loginUserFailed);
+        eraseTokens();
       })
   }
 }
