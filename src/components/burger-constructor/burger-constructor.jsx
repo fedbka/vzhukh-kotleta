@@ -4,7 +4,7 @@ import { useDrop } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { ADD_CHOSEN_INGRIDIENT, DELETE_CHOSEN_INGRIDIENT } from "../../services/actions/chosen-ingridients";
+import { addChosenIngridient, deleteChosenIngridient } from "../../services/actions/chosen-ingridients";
 import { decreaseIngridientQuantity, increaseIngridientQuantity } from "../../services/actions/ingridients";
 import { makeOrder } from "../../services/actions/make-order";
 import DragabbleWrapper from "../dragabbleWrapper/dragabble-wrapper";
@@ -14,8 +14,8 @@ import styles from "./burger-constructor.module.css";
 
 const BurgerConstructor = () => {
   const chosenIngridients = useSelector((store) => store.chosenIngridients);
-  const [showModal, setShowModal] = useState(false);
   const userAuthenticated = useSelector((store) => store.authentication.userAuthenticated);
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -24,10 +24,7 @@ const BurgerConstructor = () => {
   const [, dropTarget] = useDrop({
     accept: "ingridient",
     drop(ingridient) {
-      dispatch({
-        type: ADD_CHOSEN_INGRIDIENT,
-        item: { ...ingridient, uuid: uuidv4() },
-      });
+      dispatch(addChosenIngridient({ ...ingridient, uuid: uuidv4() }));
       dispatch(increaseIngridientQuantity(ingridient));
     },
   });
@@ -41,11 +38,8 @@ const BurgerConstructor = () => {
     [chosenIngridients]
   );
 
-  const deleteChosenIgridient = (ingridient) => {
-    dispatch({
-      type: DELETE_CHOSEN_INGRIDIENT,
-      item: { ...ingridient },
-    });
+  const deleteChosenIgridientHandler = (ingridient) => {
+    dispatch(deleteChosenIngridient({ ...ingridient }));
     dispatch(decreaseIngridientQuantity(ingridient));
   };
 
@@ -77,7 +71,7 @@ const BurgerConstructor = () => {
             price={bunIngridient.price}
             isLocked={true}
             thumbnail={bunIngridient.image_mobile}
-            extraClass="ml-1 mt-25 mb-4"
+            extraClass={styles.constructorElementTop}
           />
         )}
         <ul className={styles.filling_ingridients}>
@@ -91,7 +85,7 @@ const BurgerConstructor = () => {
                     text={ingridient.name}
                     price={ingridient.price}
                     thumbnail={ingridient.image_mobile}
-                    handleClose={() => deleteChosenIgridient(ingridient)}
+                    handleClose={() => deleteChosenIgridientHandler(ingridient)}
                   />
                 </li>
               </DragabbleWrapper>
@@ -104,12 +98,12 @@ const BurgerConstructor = () => {
             price={bunIngridient.price}
             isLocked={true}
             thumbnail={bunIngridient.image_mobile}
-            extraClass="ml-1 mt-4 mb-4"
+            extraClass={styles.constructorElementBottom}
           />
         )}
-        <div className={`${styles.accept_order} mt-6 mr-15`}>
+        <div className={styles.accept_order}>
           <div className={styles.totals}>
-            <span className="text text_type_digits-medium">{orderSumm}</span>
+            <span>{orderSumm}</span>
             <CurrencyIcon />
           </div>
           <Button

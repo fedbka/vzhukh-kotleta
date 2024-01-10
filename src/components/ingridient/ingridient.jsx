@@ -11,19 +11,14 @@ const Ingridient = ({ ingridient }) => {
     item: { ...ingridient },
   });
   return (
-    <Link
-      className={styles.card}
-      to={`/ingridients/${ingridient._id}`}
-      state={{background: location}}
-      ref={dragRef}
-    >
+    <Link className={styles.card} to={`/ingridients/${ingridient._id}`} state={{ background: location }} ref={dragRef}>
       {ingridient.__v !== 0 && <Counter count={ingridient.__v} />}
       <img className={styles.image} src={ingridient.image} alt={ingridient.name} />
-      <div className={`${styles.price} pt-2 pb-2`}>
-        <span className="text text_type_main-medium">{ingridient.price}</span>
+      <div className={styles.price}>
+        <span>{ingridient.price}</span>
         <CurrencyIcon />
       </div>
-      <p className={`text text_type_main-default ${styles.title}`}>{ingridient.name}</p>
+      <p className={styles.title}>{ingridient.name}</p>
     </Link>
   );
 };

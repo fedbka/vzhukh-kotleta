@@ -1,7 +1,7 @@
-import { useDrag, useDrop } from "react-dnd";
 import propTypes from "prop-types";
+import { useDrag, useDrop } from "react-dnd";
 import { useDispatch } from "react-redux";
-import { CHANGE_POSITION_OF_CHOSEN_INGRIDIENT } from "../../services/actions/chosen-ingridients";
+import { changePositoinOfChesenIngridient } from "../../services/actions/chosen-ingridients";
 
 const DragabbleWrapper = ({ children, item }) => {
   const [, dragRef] = useDrag({
@@ -12,12 +12,7 @@ const DragabbleWrapper = ({ children, item }) => {
   const [, dropRef] = useDrop({
     accept: "chosenIngridient",
     drop(sourceItem) {
-      item.uuid !== sourceItem.uuid &&
-        dispatch({
-          type: CHANGE_POSITION_OF_CHOSEN_INGRIDIENT,
-          target: { ...item },
-          source: sourceItem,
-        });
+      item.uuid !== sourceItem.uuid && dispatch(changePositoinOfChesenIngridient({ ...item }, sourceItem));
     },
   });
 

@@ -3,22 +3,18 @@ import { NavLink } from "react-router-dom";
 import styles from "./profile-navigation.module.css";
 
 const ProfileNavigation = ({ pageAnnotation }) => {
-  const navLinkInactiveCSS = `text text_type_main-medium text_color_inactive ${styles.link}`;
-  const navLinkActiveCSS = `text text_type_main-medium text_color_primary ${styles.link}`;
-  const pageAnnotationCSS = "pt-20 text text_type_main-default text_color_inactive";
-
   return (
     <div className={styles.navigation}>
-      <NavLink to="/profile" end className={({ isActive }) => (isActive ? navLinkActiveCSS : navLinkInactiveCSS)}>
+      <NavLink to="/profile" end className={({ isActive }) => (isActive ? styles.activeLink : styles.link)}>
         Профиль
       </NavLink>
-      <NavLink to="/profile/orders" className={({ isActive }) => (isActive ? navLinkActiveCSS : navLinkInactiveCSS)}>
+      <NavLink to="/profile/orders" className={({ isActive }) => (isActive ? styles.activeLink : styles.link)}>
         История заказов
       </NavLink>
-      <NavLink to="/logout" className={({ isActive }) => (isActive ? navLinkActiveCSS : navLinkInactiveCSS)}>
+      <NavLink to="/logout" className={({ isActive }) => (isActive ? styles.activeLink : styles.link)}>
         Выход
       </NavLink>
-      <span className={pageAnnotationCSS}>{pageAnnotation}</span>
+      <span className={styles.annotation}>{pageAnnotation}</span>
     </div>
   );
 };

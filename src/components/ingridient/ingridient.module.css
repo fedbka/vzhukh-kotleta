@@ -26,11 +26,13 @@
     align-content: center;
     justify-content: center;
     gap: 9px;
+    composes: pt-2 pb-2 text text_type_main-medium from global;
 }
 
 .title {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 240px;    
+    max-width: 240px; 
+    composes: text text_type_main-default from global;  
 }

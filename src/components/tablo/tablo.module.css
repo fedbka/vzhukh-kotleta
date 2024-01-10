@@ -1,0 +1,19 @@
+.component {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.currentOrders {
+  display: flex;
+  flex-direction: row;
+}
+
+.ordersCountAllTime {
+  display: flex;
+}
+
+.ordersCountToday {
+  display: flex;
+}

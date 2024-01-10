@@ -31,7 +31,7 @@ export const decreaseIngridientQuantity = (ingridient, quantity = 1) => ({
 
 export const RESET_INGRIDIENT_QUANTITY = 'RESET_INGRIDIENT_QUANTITY';
 export const resetIngridientQuantity = () => ({
-  type: DECREASE_INGRIDIENT_QUANTITY,
+  type: RESET_INGRIDIENT_QUANTITY,
 });
 
 
