@@ -8,12 +8,10 @@ import styles from "./modal.module.css";
 const modalRoot = document.getElementById("modal");
 
 const Modal = ({ handlerOnClose, children }) => {
-  
   const onClose = useCallback(() => handlerOnClose(), [handlerOnClose]);
-  
+
   useEffect(() => {
-    const handlerOnPressEsc = (event) =>
-      event.key === "Escape" && onClose();
+    const handlerOnPressEsc = (event) => event.key === "Escape" && onClose();
 
     document.addEventListener("keydown", handlerOnPressEsc);
 

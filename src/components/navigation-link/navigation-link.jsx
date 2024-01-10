@@ -9,10 +9,7 @@ const NavigationLink = ({ Icon, text = "", link = "/" }) => {
         <>
           <Icon type={isActive ? "primary" : "secondary"} />
           <p
-            className={
-              "text text_type_main-default" +
-              (!isActive ? " text_color_inactive" : "")
-            }
+            className={isActive ? styles.text : styles.textInactive}
           >
             {text}
           </p>

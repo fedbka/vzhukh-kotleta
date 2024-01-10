@@ -47,7 +47,7 @@ const BurgerIngredients = () => {
   return (
     <>
       <section className={styles.component}>
-        <h1 className="pt-10 pb-5 text text_type_main-large">Соберите бургер</h1>
+        <h1 className={styles.componentTitle}>Соберите бургер</h1>
         <ul className={styles.tabs}>
           {ingridientsTypes.items.map((ingridientsType, index) => (
             <li key={index} className={styles.tab}>
@@ -68,7 +68,7 @@ const BurgerIngredients = () => {
               className={styles.ingridients_list_type}
               ref={ingridientsType.id === "bun" ? refBunTab : ingridientsType.id === "sauce" ? refSauceTab : null}
             >
-              <h1 className="text text_type_main-medium pt-10 pb-6">{ingridientsType.name}</h1>
+              <h1 className={styles.ingridientTypeTitle}>{ingridientsType.name}</h1>
               <IngridientList
                 ingridients={ingridients.items.filter((ingridient) => ingridient.type === ingridientsType.id)}
               />

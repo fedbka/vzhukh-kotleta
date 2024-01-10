@@ -1,7 +1,7 @@
 import Api from "../api";
 import { getTokens } from "./authentication";
-import { CLEAR_CHOSEN_INGRIDIENTS } from "./chosen-ingridients";
-import { RESET_INGRIDIENT_QUANTITY } from "./ingridients";
+import { clearChosenIngridients } from "./chosen-ingridients";
+import { resetIngridientQuantity } from "./ingridients";
 
 export const MAKE_ORDER_REQUEST = 'MAKE_ORDER_REQUEST';
 export const makeOrderRequest = () => ({
@@ -28,10 +28,8 @@ export function makeOrder(chosenIngridients) {
       .then(res => {
         if (res && res.success) {
           dispatch(makeOrderSuccess({ description: res.name, number: res.order.number }));
-          dispatch({
-            type: CLEAR_CHOSEN_INGRIDIENTS,
-          });
-          dispatch({ type: RESET_INGRIDIENT_QUANTITY })
+          dispatch(clearChosenIngridients());
+          dispatch(resetIngridientQuantity());
         } else {
           dispatch(makeOrderFailed());
         }
