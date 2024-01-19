@@ -11,6 +11,7 @@
 }
 
 .ingridientTypeTitle {
+    text-decoration: none;
     composes: text text_type_main-medium pt-10 pb-6 from global;
 }
 .tabs {
@@ -38,12 +39,5 @@
     list-style: none;
     overflow-y: scroll;
     height: 65vh;
-}
-
-.ingridients_list_by_type::-webkit-scrollbar {
-    width: 8px;
-}
-
-.ingridients_list_by_type::-webkit-scrollbar-thumb {
-    background-color: #8585ad;
+    composes: custom-scroll from global;
 }

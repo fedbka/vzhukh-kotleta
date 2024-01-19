@@ -42,7 +42,7 @@ export function getIngridients() {
     .then(res => dispatch(getIngridientsSuccess(res.data)))
     .catch(err => {
       console.log(err);
-      dispatch(getIngridientsFailed);
+      dispatch(getIngridientsFailed());
     });
   };
 }

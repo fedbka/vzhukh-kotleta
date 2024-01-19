@@ -27,7 +27,7 @@ const LoginPage = () => {
 
   return (
     <main className={styles.page}>
-      <h1 className="pt-0 pb-0 text text_type_main-large">Вход</h1>
+      <h1 className={styles.title}>Вход</h1>
       <form className={styles.form} onSubmit={onSubmitFormHandler} autoComplete="off">
         <EmailInput name="email" value={formData.email} onChange={onChangeValuesHandler} autoComplete="off" />
         <PasswordInput name="password" value={formData.password} onChange={onChangeValuesHandler} autoComplete="off" />
@@ -36,15 +36,15 @@ const LoginPage = () => {
         </Button>
       </form>
       <div className={styles.additionalActions}>
-        <p className="text text_type_main-default">
-          <span className="text_color_inactive">Вы — новый пользователь?</span>
-          <Link to="/register" className={`pl-2 text_color_accent ${styles.link}`}>
+        <p className={styles.additionalAction}>
+          Вы — новый пользователь?
+          <Link to="/register" className={styles.link}>
             Зарегистрироваться
           </Link>
         </p>
-        <p className="text text_type_main-default text_color_inactive">
-          <span>Забыли пароль?</span>
-          <Link to="/forgot-password" className={`pl-2 text_color_accent ${styles.link}`}>
+        <p className={styles.additionalAction}>
+          Забыли пароль?
+          <Link to="/forgot-password" className={styles.link}>
             Восстановить пароль
           </Link>
         </p>

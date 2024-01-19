@@ -50,7 +50,6 @@ class vzukhKotletaApi {
     if (json.message !== "jwt expired") return Promise.reject(json);
 
     const updateTokensResponse = await this.refreshToken(refreshToken);
-
     if (!updateTokensResponse || !updateTokensResponse.success) return Promise.reject(updateTokensResponse);
 
     saveTockensCallback({ ...updateTokensResponse });

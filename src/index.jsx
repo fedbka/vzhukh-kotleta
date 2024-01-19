@@ -9,23 +9,25 @@ import "./index.css";
 import { rootReducer } from "./services/reducers";
 
 import reportWebVitals from "./reportWebVitals";
+import { socketMiddleware } from "./services/middleware/socket-middleware";
+import { feedMiddlewareActions } from "./services/actions/feed";
 
 const composeEnhancers = (typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})) || compose;
 
-const enhancer = composeEnhancers(applyMiddleware(thunk));
+const enhancer = composeEnhancers(applyMiddleware(thunk, socketMiddleware(feedMiddlewareActions)));
 
 const store = createStore(rootReducer, enhancer);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>
+  //<React.StrictMode>
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
+  //</React.StrictMode>
 );
 
 reportWebVitals();

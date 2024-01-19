@@ -1,3 +1,37 @@
 .component {
   display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 584px;
+  gap: 24px;
+  border-radius: var(--common-border-radius-s);
+  background-color: var(--background);
+  box-sizing: border-box;
+  padding: 24px;
+}
+
+.orderInfo {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  composes: pb-5 text text_type_digits-default text_color_primary from global;
+}
+
+.orderTime {
+  composes: text text_type_main-default text_color_inactive from global;
+}
+
+.orderTitle {
+  padding: 0;
+  margin: 0;
+  composes: text text_type_main-medium text_color_primary from global;
+}
+
+.orderPrice {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: flex-end;
 }

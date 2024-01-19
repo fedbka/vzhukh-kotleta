@@ -17,14 +17,7 @@
   list-style: none;
   overflow-y: scroll;
   height: 40vh;
-}
-
-.filling_ingridients::-webkit-scrollbar {
-  width: 8px;
-}
-
-.filling_ingridients::-webkit-scrollbar-thumb {
-  background-color: #8585ad;
+  composes: custom-scroll from global;  
 }
 
 .filling_ingridients_item {

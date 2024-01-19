@@ -31,8 +31,11 @@ const BurgerIngredients = () => {
     } else if (topOfBunTab < topOfIngridientsList) {
       ingridientTypeId = "sauce";
     }
-    dispatch(setCurrentIngridientsType({ id: ingridientTypeId }));
-  }, [dispatch, refUl, refBunTab, refSauceTab]);
+
+    if (ingridientsTypes.currentItem.id !== ingridientTypeId) {
+      dispatch(setCurrentIngridientsType({ id: ingridientTypeId }));
+    }
+  }, [dispatch, ingridientsTypes.currentItem.id, refUl, refBunTab, refSauceTab]);
 
   useEffect(() => {
     if (!ingridientsTypes.itemsLoaded) {
@@ -42,7 +45,7 @@ const BurgerIngredients = () => {
     if (!ingridients.itemsLoaded) {
       dispatch(getIngridients());
     }
-  }, [dispatch, ingridientsTypes.itemsLoaded, ingridients.itemsLoaded]);
+  }, [dispatch, ingridientsTypes.itemsLoaded && ingridients.itemsLoaded]);
 
   return (
     <>
