@@ -1,46 +1,52 @@
-export const socketMiddleware = (wsActions) => {
+export const socketMiddleware = (socketActions) => {
   return store => {
     let socket = null;
+    let messageProccessing = null;
 
     return next => action => {
       const { dispatch } = store;
-      const { type, payload } = action;
-      const { wsConnect, wsConnecting, wsDisconnect, wsSendMessage, onOpen, onClose, onError, onMessage } = wsActions;
-      
-      if (type === wsConnect) {
-        socket = new WebSocket(`${payload}`);
-        dispatch(wsConnecting());
+      const { type, payload, messageProccessingHandler } = action;
+      const { connectOn, disconnectOn, onOpen, onClose, onError, onInboundMessage, onOutboundMessage } = socketActions;
+
+      if (type === connectOn) {
+        socket = new WebSocket(payload);
+        if (typeof messageProccessing === "function") {
+          messageProccessing = messageProccessingHandler;
+        }
       }
 
       if (socket) {
         socket.onopen = event => {
-          dispatch(onOpen(event));
+          onOpen && onOpen.forEach(func => dispatch(func(event)));
         };
 
         socket.onerror = event => {
-          dispatch(onError(event));
+          onError && onError.forEach(func => dispatch(func(event)));
         };
 
         socket.onmessage = event => {
           const { data } = event;
           const parsedData = JSON.parse(data);
-          const { success, ...restParsedData } = parsedData;
-
-          dispatch(onMessage(restParsedData));
+          let { success, ...message } = parsedData;
+          if (typeof messageProccessing === "function") {
+            message = messageProccessing(message);
+          }
+          onInboundMessage && onInboundMessage.forEach(func => dispatch(func(message)));
         };
 
         socket.onclose = event => {
-          dispatch(onClose(event));
+          onClose && onClose.forEach(func => dispatch(func(event)));
         };
 
-        if (type === wsSendMessage) {
-             const message = { ...payload};
+        if (type === onOutboundMessage) {
+          const message = { ...payload };
           socket.send(JSON.stringify(message));
         }
 
-        if (type === wsDisconnect && socket.readyState === 1) {
+        if (type === disconnectOn && socket.readyState === 1) {
           socket.close(1000);
           socket = null;
+          messageProccessing = null;
         }
       }
 

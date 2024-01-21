@@ -48,38 +48,35 @@ const BurgerIngredients = () => {
   }, [dispatch, ingridientsTypes.itemsLoaded && ingridients.itemsLoaded]);
 
   return (
-    <>
-      <section className={styles.component}>
-        <h1 className={styles.componentTitle}>Соберите бургер</h1>
-        <ul className={styles.tabs}>
-          {ingridientsTypes.items.map((ingridientsType, index) => (
-            <li key={index} className={styles.tab}>
-              <Tab
-                active={ingridientsTypes.currentItem.id === ingridientsType.id}
-                value={{ ...ingridientsType }}
-                onClick={setCurrentIngridientType}
-              >
-                {ingridientsType.name}
-              </Tab>
-            </li>
-          ))}
-        </ul>
-        <ul className={styles.ingridients_list_by_type} onScroll={onScrollHandler} ref={refUl}>
-          {ingridientsTypes.items.map((ingridientsType, index) => (
-            <li
-              key={index}
-              className={styles.ingridients_list_type}
-              ref={ingridientsType.id === "bun" ? refBunTab : ingridientsType.id === "sauce" ? refSauceTab : null}
+    <section className={styles.component}>
+      <ul className={styles.tabs}>
+        {ingridientsTypes.items.map((ingridientsType, index) => (
+          <li key={index} className={styles.tab}>
+            <Tab
+              active={ingridientsTypes.currentItem.id === ingridientsType.id}
+              value={{ ...ingridientsType }}
+              onClick={setCurrentIngridientType}
             >
-              <h1 className={styles.ingridientTypeTitle}>{ingridientsType.name}</h1>
-              <IngridientList
-                ingridients={ingridients.items.filter((ingridient) => ingridient.type === ingridientsType.id)}
-              />
-            </li>
-          ))}
-        </ul>
-      </section>
-    </>
+              {ingridientsType.name}
+            </Tab>
+          </li>
+        ))}
+      </ul>
+      <ul className={styles.ingridients_list_by_type} onScroll={onScrollHandler} ref={refUl}>
+        {ingridientsTypes.items.map((ingridientsType, index) => (
+          <li
+            key={index}
+            className={styles.ingridients_list_type}
+            ref={ingridientsType.id === "bun" ? refBunTab : ingridientsType.id === "sauce" ? refSauceTab : null}
+          >
+            <h1 className={styles.ingridientTypeTitle}>{ingridientsType.name}</h1>
+            <IngridientList
+              ingridients={ingridients.items.filter((ingridient) => ingridient.type === ingridientsType.id)}
+            />
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 };
 

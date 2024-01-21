@@ -1,5 +1,5 @@
 import Api from "../api";
-import { getTokens } from "./authentication";
+import { getTokens } from "../tokens";
 import { clearChosenIngridients } from "./chosen-ingridients";
 import { resetIngridientQuantity } from "./ingridients";
 

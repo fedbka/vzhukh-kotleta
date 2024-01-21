@@ -3,21 +3,17 @@ import Order from "../order/order";
 import styles from "./orders.module.css";
 
 const Orders = () => {
-  const { orders, isFetching, isError } = useSelector((store) => store.feed);
+  const { items } = useSelector((store) => store.orders);
 
   return (
     <div className={styles.component}>
-      {isError && <h1 className={styles.title}>Ошибка загрузки заказов</h1>}
-      {isFetching && <h1 className={styles.title}>Загружаем текущие заказы...</h1>}
-      {!isError && !isFetching && (
-        <ul className={styles.ordersList}>
-          {orders.map((order, index) => (
-            <li className={styles.order} key={index}>
-              <Order order={order} />
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul className={styles.ordersList}>
+        {items && items.map((order, index) => (
+          <li className={styles.order} key={index}>
+            <Order order={order} />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import Api from "../api";
+import { eraseTokens, getTokens, setTokens } from "../tokens";
 
 export const REGISTER_USER_REQUEST = "REGISTER_USER_REQUEST";
 export const registerUserRequest = () => ({
@@ -231,16 +232,3 @@ export const updateUserProfile = (userProfile) => {
   }
 }
 
-export const getTokens = () => {
-  return {
-    accessToken: localStorage.getItem('accessToken'),
-    refreshToken: localStorage.getItem('refreshToken'),
-  }
-}
-
-export const setTokens = ({ accessToken, refreshToken }) => {
-  accessToken ? localStorage.setItem("accessToken", accessToken) : localStorage.removeItem("accessToken");
-  refreshToken ? localStorage.setItem("refreshToken", refreshToken) : localStorage.removeItem("refreshToken");
-}
-
-export const eraseTokens = () => setTokens({ accessToken: '', refreshToken: '' });

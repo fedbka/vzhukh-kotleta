@@ -1,10 +1,9 @@
 .component {
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
+  margin: 0 0;
   padding: 0;
   width: 100%;
-  max-width: 608px;
   max-height: calc(100vh - 228px);
   overflow-y: scroll;
   gap: 16px;

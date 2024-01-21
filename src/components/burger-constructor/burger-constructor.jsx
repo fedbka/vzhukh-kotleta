@@ -74,6 +74,9 @@ const BurgerConstructor = () => {
             extraClass={styles.constructorElementTop}
           />
         )}
+        {!bunIngridient && (
+          <div className={styles.constructorElementTop} />
+        )}
         <ul className={styles.filling_ingridients}>
           {chosenIngridients.items
             .filter((ingridient) => ingridient.type !== "bun")
