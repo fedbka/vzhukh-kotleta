@@ -37,7 +37,7 @@ export const socketMiddleware = (socketActions) => {
           socket.send(JSON.stringify(message));
         }
 
-        if (type === disconnectOn && socket.readyState === 1) {
+        if (type === disconnectOn) {
           onDisconnect && onDisconnect.forEach(func => dispatch(func()))
           socket.close(1000);
           socket = null;

@@ -62,7 +62,7 @@ const OrderPage = () => {
                   <img className={styles.orderIngridientImage} src={ingredient.image} alt={ingredient.name} />
                   <span className={styles.orderIngridientName}>{ingredient.name}</span>
                   <span className={styles.orderPrice}>
-                    <span>{count}</span>
+                    <span>{ingredient.type === "bun" && count === 1 ? 2 : count}</span>
                     <span>x</span>
                     <span>{ingredient.price}</span>
                     <CurrencyIcon />

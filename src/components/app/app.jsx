@@ -23,9 +23,11 @@ const App = () => {
   const background = location.state && location.state.background;
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const userLogin = () => {
     dispatch(autoLoginUser()).catch((err) => {});
-  }, [dispatch]);
+  };
+
+  useEffect(userLogin, [dispatch]);
 
   const onCloseHandler = useCallback(() => navigate(-1), [navigate]);
 

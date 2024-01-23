@@ -40,7 +40,7 @@
 .orderTitle {
   width: 100%;
   text-align: left;
-  composes: text text_type_main_default text_color_primary from global;
+  composes: text text_type_main-medium text_color_primary from global;
 }
 
 
@@ -48,7 +48,7 @@
   margin: 0;
   padding: 0;
   text-align: left;
-  compses: text text_type_main_small text_color_primaryfrom global;
+  composes: text text_type_main-default text_color_primary from global;
 }
 
 .orderStatusDone {
@@ -57,7 +57,7 @@
 
 .orderIngridientsTitle {
   text-align: left;
-  composes: pt-15 text text_type_main_default text_color_primary from global;
+  composes: pt-15 text text_type_main-medium text_color_primary from global;
 }
 
 .orderIngridients {

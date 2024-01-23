@@ -9,7 +9,7 @@ import { decreaseIngridientQuantity, increaseIngridientQuantity } from "../../se
 import { makeOrder } from "../../services/actions/make-order";
 import DragabbleWrapper from "../dragabbleWrapper/dragabble-wrapper";
 import Modal from "../modal/modal";
-import OrderDetails from "../order-details/order-details";
+import OrderSubmit from "../order-submit/order-submit";
 import styles from "./burger-constructor.module.css";
 
 const BurgerConstructor = () => {
@@ -60,7 +60,7 @@ const BurgerConstructor = () => {
     <>
       {showModal && (
         <Modal handlerOnClose={() => setShowModal(false)}>
-          <OrderDetails />
+          <OrderSubmit />
         </Modal>
       )}
       <section className={styles.component} ref={dropTarget}>
@@ -74,9 +74,7 @@ const BurgerConstructor = () => {
             extraClass={styles.constructorElementTop}
           />
         )}
-        {!bunIngridient && (
-          <div className={styles.constructorElementTop} />
-        )}
+        {!bunIngridient && <div className={styles.constructorElementTop} />}
         <ul className={styles.filling_ingridients}>
           {chosenIngridients.items
             .filter((ingridient) => ingridient.type !== "bun")
@@ -114,7 +112,7 @@ const BurgerConstructor = () => {
             type="primary"
             size="large"
             onClick={makeNewOrder}
-            disabled={!(chosenIngridients.items.length >= 2)}
+            disabled={!(chosenIngridients.items.length >= 2 && chosenIngridients.items.find(el => el.type === 'bun'))}
           >
             Оформить заказ
           </Button>
