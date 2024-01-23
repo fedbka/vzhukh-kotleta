@@ -2,16 +2,15 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Orders from "../../components/orders/orders";
 import Tablo from "../../components/tablo/tablo";
-import { socketDisconnect } from "../../services/actions/socket";
-import styles from "./FeedPage.module.css";
-import { feedEndpoint } from "../../services/endpoints";
-import { getOrdersRequest } from "../../services/actions/orders";
 import { getIngridients } from "../../services/actions/ingridients";
+import { getOrdersRequest } from "../../services/actions/orders";
+import { socketDisconnect } from "../../services/actions/socket";
+import { feedEndpoint } from "../../services/endpoints";
+import styles from "./FeedPage.module.css";
 
 const FeedPage = () => {
   const {
     itemsLoaded: ordersLoaded,
-    isFetching: ordersIsFetching,
     isError: ordersIsError,
   } = useSelector((store) => store.orders);
   const {
@@ -27,9 +26,9 @@ const FeedPage = () => {
 
   useEffect(() => {
     if (!ingredientsLoaded && !ingredientsIsFetching) dispatch(getIngridients());
-    if (!ordersLoaded && !ordersIsFetching) dispatch(getOrdersRequest(endpoint));
+    dispatch(getOrdersRequest(endpoint));
     return () => dispatch(socketDisconnect());
-  }, [dispatch]);
+  }, [dispatch, endpoint]);
 
   return (
     <main className={styles.page}>

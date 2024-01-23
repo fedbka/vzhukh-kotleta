@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import { CurrencyIcon, FormattedDate } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import { getIngridients } from "../../services/actions/ingridients";
 import { getOrdersRequest } from "../../services/actions/orders";
 import { feedEndpoint, orderHistoryEndpoint } from "../../services/endpoints";
+import { getNomalizedOrderData } from "../../services/orders-proccessing";
 import styles from "./OrderPage.module.css";
-import { CurrencyIcon, FormattedDate } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const OrderPage = () => {
   const dispatch = useDispatch();
@@ -22,12 +23,19 @@ const OrderPage = () => {
   const orderStatus = order?.status === "created" ? "Создан" : order?.status === "pending" ? "Готовится" : "Выполнен";
   const orderTime = new Date(order?.updatedAt);
   const timeZone = orderTime?.getTimezoneOffset() / 60;
-  const orderPrice = 0;
 
   useEffect(() => {
     if (!ingredients.itemsLoaded && !ingredients.isFetching) dispatch(getIngridients());
     if (!orders.itemsLoaded && !orders.isFetching) dispatch(getOrdersRequest(endpoint));
   }, [dispatch]);
+
+  const { orderPrice, orderIngredientsCount } = useMemo(
+    () =>
+      order && ingredients.itemsLoaded
+        ? getNomalizedOrderData(order, ingredients.items)
+        : { orderPrice: 0, orderIngredientsCount: [] },
+    [order, ingredients.itemsLoaded, ingredients.items]
+  );
 
   return (
     <div className={styles.page}>
@@ -39,7 +47,9 @@ const OrderPage = () => {
       )}
       {isNecessaryLoaded && (
         <>
-          <h2 className={`${styles.orderNumber} ${!background && styles.orderNumberNonModal}`}>#{orderNumber.toString().padStart(6, "0")}</h2>
+          <h2 className={`${styles.orderNumber} ${!background && styles.orderNumberNonModal}`}>
+            #{orderNumber.toString().padStart(6, "0")}
+          </h2>
           <div className={styles.orderTitleAndStatus}>
             <h1 className={styles.orderTitle}>{order.name}</h1>
             <p className={`${styles.orderStatus} ${order.status === "done" && styles.orderStatusDone}`}>
@@ -47,8 +57,17 @@ const OrderPage = () => {
             </p>
             <h2 className={styles.orderIngridientsTitle}>Состав:</h2>
             <ul className={styles.orderIngridients}>
-              {order.ingredients.map((element) => (
-                <li key={element}>{element}</li>
+              {orderIngredientsCount.map(([ingredient, count]) => (
+                <li className={styles.orderIngridient} key={ingredient._id}>
+                  <img className={styles.orderIngridientImage} src={ingredient.image} alt={ingredient.name} />
+                  <span className={styles.orderIngridientName}>{ingredient.name}</span>
+                  <span className={styles.orderPrice}>
+                    <span>{count}</span>
+                    <span>x</span>
+                    <span>{ingredient.price}</span>
+                    <CurrencyIcon />
+                  </span>
+                </li>
               ))}
             </ul>
             <div className={styles.orderTimeAndPrice}>
@@ -58,7 +77,7 @@ const OrderPage = () => {
               </span>
               <span className={styles.orderPrice}>
                 {orderPrice}
-                <CurrencyIcon/>
+                <CurrencyIcon />
               </span>
             </div>
           </div>

@@ -67,9 +67,38 @@
   composes: custom-scroll pt-6 text text_type_main_small text_color_primary from global;
   width: 100%;
   max-height: 312px;
+  min-width: 640px;
   overflow-y: scroll;
   list-style-type: none;
-  list-style: none;  
+  list-style: none; 
+  overflow: auto;
+  scrollbar-gutter: stable; 
+}
+
+.orderIngridient {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  padding: 0;
+  margin: 0;
+  composes: custom-scroll pt-6 text text_type_main_small text_color_primary from global;
+  width: 100%;
+  max-width: 608px;
+}
+
+.orderIngridientImage {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid #801AB2;
+  background: var(--background-alt);
+  object-fit: cover;  
+}
+
+.orderIngridientName {
+  width: 100%;
+  composes: text text_type_main-default text_color_primary from global;
 }
 
 .orderTimeAndPrice {

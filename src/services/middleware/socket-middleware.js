@@ -38,7 +38,6 @@ export const socketMiddleware = (socketActions) => {
         }
 
         if (type === disconnectOn && socket.readyState === 1) {
-          console.log('nen');
           onDisconnect && onDisconnect.forEach(func => dispatch(func()))
           socket.close(1000);
           socket = null;

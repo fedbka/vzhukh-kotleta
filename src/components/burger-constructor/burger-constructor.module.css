@@ -17,6 +17,8 @@
   list-style: none;
   overflow-y: scroll;
   height: 40vh;
+  overflow: auto;
+  scrollbar-gutter: stable; 
   composes: custom-scroll from global;  
 }
 
