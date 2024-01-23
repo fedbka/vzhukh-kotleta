@@ -1,8 +1,7 @@
 .page {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: left;
     gap: 60px;
     text-align: center;
     margin: 120px auto;

@@ -1,6 +1,6 @@
 export const SOCKET_CONNECT = "SOCKET_CONNECT";
 export const socketConnect = (payload) => ({
-  type: SOCKET_DISCONNECT,
+  type: SOCKET_CONNECT,
   payload: payload,
 });
 
@@ -42,7 +42,9 @@ export const socketOutboundMessage = (payload) => ({
 
 export const socketActions = {
   connectOn: SOCKET_CONNECT,
+  onConnect: [socketConnect],
   disconnectOn: SOCKET_DISCONNECT,
+  onDisconnect: [],
   onOpen: [socketOpen, ],
   onClose: [socketClose, ],
   onError: [socketError, ],

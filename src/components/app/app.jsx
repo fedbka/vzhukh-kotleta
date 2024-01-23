@@ -15,6 +15,7 @@ import AppHeader from "../app-header/app-header";
 import IngridientDetails from "../ingridient-details/ingridients-details";
 import Modal from "../modal/modal";
 import ProtectedRoute from "../protected-route/protected-route";
+import OrderPage from "../../pages/OrderPage/OrderPage";
 
 const App = () => {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ const App = () => {
       <Routes location={background || location}>
         <Route path="/" element={<ConstructorPage />} />
         <Route path="/feed" element={<FeedPage />} />
+        <Route path='/feed/:orderNumber' element={<OrderPage />} />
         <Route
           path="/profile"
           element={
@@ -50,6 +52,14 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/profile/orders/:orderNumber"
+          element={
+            <ProtectedRoute anonymous={false}>
+              <OrderPage />
+            </ProtectedRoute>
+          }
+        />        
         <Route path="/logout" element={<LogoutPage />} />
         <Route
           path="/login"
@@ -95,6 +105,22 @@ const App = () => {
               </Modal>
             }
           />
+          <Route
+            path="/feed/:orderNumber"
+            element={
+              <Modal handlerOnClose={onCloseHandler}>
+                <OrderPage />
+              </Modal>
+            }
+          />
+          <Route
+            path="/profile/orders/:orderNumber"
+            element={
+              <Modal handlerOnClose={onCloseHandler}>
+                <OrderPage />
+              </Modal>
+            }
+          />          
         </Routes>
       )}
     </div>

@@ -1,18 +1,15 @@
 export const socketMiddleware = (socketActions) => {
   return store => {
     let socket = null;
-    let messageProccessing = null;
 
     return next => action => {
       const { dispatch } = store;
-      const { type, payload, messageProccessingHandler } = action;
-      const { connectOn, disconnectOn, onOpen, onClose, onError, onInboundMessage, onOutboundMessage } = socketActions;
+      const { type, payload } = action;
+      const { connectOn, onConnect, disconnectOn, onDisconnect, onOpen, onClose, onError, onInboundMessage, onOutboundMessage } = socketActions;
 
       if (type === connectOn) {
         socket = new WebSocket(payload);
-        if (typeof messageProccessing === "function") {
-          messageProccessing = messageProccessingHandler;
-        }
+        onConnect && onConnect.forEach(func => dispatch(func()));
       }
 
       if (socket) {
@@ -28,9 +25,6 @@ export const socketMiddleware = (socketActions) => {
           const { data } = event;
           const parsedData = JSON.parse(data);
           let { success, ...message } = parsedData;
-          if (typeof messageProccessing === "function") {
-            message = messageProccessing(message);
-          }
           onInboundMessage && onInboundMessage.forEach(func => dispatch(func(message)));
         };
 
@@ -44,9 +38,10 @@ export const socketMiddleware = (socketActions) => {
         }
 
         if (type === disconnectOn && socket.readyState === 1) {
+          console.log('nen');
+          onDisconnect && onDisconnect.forEach(func => dispatch(func()))
           socket.close(1000);
           socket = null;
-          messageProccessing = null;
         }
       }
 

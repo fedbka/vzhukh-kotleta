@@ -1,3 +1,93 @@
 .page {
   display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  max-width: 640px;
+  width: 100%;
+}
+
+.orderInfo {
+  padding: 0;
+  margin: 0;
+  min-height: 64px;
+  composes: text text_type_main-default from global;
+}
+
+.orderNumber {
+  width: 100%;
+  margin: 0;
+  text-align: left;
+  align-self: flex-start;
+  composes: pt-5 text text_type_digits-default from global;
+}
+
+.orderNumberNonModal {
+  padding-top: 120px;
+  text-align: center;
+}
+
+.orderTitleAndStatus {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  composes: pt-5 from global;
+}
+
+.orderTitle {
+  width: 100%;
+  text-align: left;
+  composes: text text_type_main_default text_color_primary from global;
+}
+
+
+.orderStatus {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  compses: text text_type_main_small text_color_primaryfrom global;
+}
+
+.orderStatusDone {
+  color: var(--colors-interface-success);
+}
+
+.orderIngridientsTitle {
+  text-align: left;
+  composes: pt-15 text text_type_main_default text_color_primary from global;
+}
+
+.orderIngridients {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  composes: custom-scroll pt-6 text text_type_main_small text_color_primary from global;
+  width: 100%;
+  max-height: 312px;
+  overflow-y: scroll;
+  list-style-type: none;
+  list-style: none;  
+}
+
+.orderTimeAndPrice {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  composes: pt-10 from global;
+}
+
+.orderTime {
+  composes: text text_type_main-default text_color_inactive from global;
+}
+
+.orderPrice {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: flex-end;
+  composes: text text_type_digits-default text_color_primary from global;
 }

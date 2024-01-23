@@ -13,7 +13,7 @@ export const ordersReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ORDERS_REQUEST: {
       return {
-        ...initialState,    
+        ...initialState,
         isFetching: true,
       }
     }
@@ -22,7 +22,7 @@ export const ordersReducer = (state = initialState, action) => {
         ...state,
         items: [...action.payload.orders],
         numberOfOrdersForAllTime: action.payload.total,
-        numberOfOrdersForToday: action.payload.totalToday,        
+        numberOfOrdersForToday: action.payload.totalToday,
         isFetching: false,
         itemsLoaded: true,
       }

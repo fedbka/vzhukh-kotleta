@@ -64,9 +64,17 @@
   gap: 8px;
   max-height: 320px;
   flex-wrap: wrap;
-  column-gap: 10px;  
+  column-gap: 10px;
 }
+
 .orderNumber {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  composes: text text_type_digits-default text_color_primary from global;
+}
+
+.orderNumberDone {
   margin: 0;
   padding: 0;
   color: var(--colors-interface-success);

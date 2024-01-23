@@ -10,6 +10,7 @@ import {
 const initialState = {
   items: [],
   isFetching: false,
+  isError: false,
   itemsLoaded: false,
 };
 
@@ -20,7 +21,9 @@ export const ingridientsReducer = (state = initialState, action) => {
         ...state,
         items: initialState.items,
         isFetching: true,
+        isError: false,
         itemsLoaded: false,
+
       }
     }
     case GET_INGRIDIENTS_SUCCESS: {
@@ -35,6 +38,7 @@ export const ingridientsReducer = (state = initialState, action) => {
       return {
         ...state,
         isFetching: false,
+        isError: true,
       }
     }
     case INCREASE_INGRIDIENT_QUANTITY: {

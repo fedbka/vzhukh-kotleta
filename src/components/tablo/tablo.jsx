@@ -4,8 +4,8 @@ import styles from "./tablo.module.css";
 const Tablo = () => {
   const { items, numberOfOrdersForAllTime, numberOfOrdersForToday } = useSelector((store) => store.orders);
 
-  const numbersOfOrdersDoned = items.filter((order) => order.status === "done").slice(0, 30).map(element => element.number);
-  const numbersOfOrdersInWork = items.filter((order) => order.status === "pending").map(element => element.number);
+  const numbersOfOrdersDoned = items.filter((order) => order.status === "done").slice(0, 20).map(element => element.number);
+  const numbersOfOrdersInWork = items.filter((order) => order.status === "pending").slice(0, 20).map(element => element.number);
 
   return (
     <div className={styles.component}>
@@ -14,7 +14,7 @@ const Tablo = () => {
           <p className={styles.statsTitle}>Готовы:</p>
           <ul className={styles.ordersNumbers}>
             {numbersOfOrdersDoned.map(number => {
-              return <li key={number} className={styles.orderNumber}>{number}</li>;
+              return <li key={number} className={styles.orderNumberDone}>{number.toString().padStart(6, '0')}</li>;
             })}
           </ul>
         </div>
@@ -22,7 +22,7 @@ const Tablo = () => {
           <p className={styles.statsTitle}>В работе:</p>
           <ul className={styles.ordersNumbers}>
             {numbersOfOrdersInWork.map(number => {
-              return <li key={number} className={styles.orderNumber}>{number}</li>;
+              return <li key={number} className={styles.orderNumber}>{number.toString().padStart(6, '0')}</li>;
             })}
           </ul>
         </div>

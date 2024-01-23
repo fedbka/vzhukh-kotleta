@@ -1,10 +1,15 @@
 .page {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: left;
     align-items: flex-start;
     gap: 24px;
     text-align: center;
     margin: 120px auto;
     max-width: 1240px;
+}
+
+.orders {
+    width: 100%;
+    max-width: 872px;
 }

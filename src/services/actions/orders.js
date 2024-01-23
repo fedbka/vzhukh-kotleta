@@ -26,7 +26,7 @@ export const resetOrders = () => ({
 export const ordersSocketAction = {
   ...socketActions,
   connectOn: GET_ORDERS_REQUEST,
-  onClose: [...socketActions.onClose, resetOrders],
+  onDisconnect: [...socketActions.onDisconnect, resetOrders],
   onInboundMessage: [...socketActions.onInboundMessage, getOrdersSuccess],
 
 }

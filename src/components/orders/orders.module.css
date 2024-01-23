@@ -20,10 +20,18 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  list-style-type: none;
+  list-style: none;
+  width: 100%;
 }
 
 .order {
   margin: 0;
   padding: 0;
+  width: 100%;
 
+}
+
+.link {
+  text-decoration: none;
 }
