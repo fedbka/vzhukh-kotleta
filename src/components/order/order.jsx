@@ -1,13 +1,13 @@
 import { CurrencyIcon, FormattedDate } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { getNormalizedOrderData, getOrderStatusText } from "../../services/orders-proccessing";
+import { getNormalizedOrderData, getOrderStatusText, getOrderTimeZoneText } from "../../services/orders-proccessing";
 import styles from "./order.module.css";
 
 const Order = ({ order, showStatus = false }) => {
   const ingredients = useSelector((store) => store.ingridients);
   const orderTime = new Date(order.updatedAt);
-  const timeZone = orderTime.getTimezoneOffset() / 60;
+  const timeZone = getOrderTimeZoneText(order.updatedAt)
   const orderStatus = getOrderStatusText(order.status);
 
   const { orderPrice, orderIngredientsCount } = useMemo(
@@ -24,7 +24,7 @@ const Order = ({ order, showStatus = false }) => {
         <span>#{order.number.toString().padStart(6, "0")}</span>
         <span className={styles.orderTime}>
           <FormattedDate date={orderTime} />
-          {" i-GMT" + timeZone}
+          {timeZone}
         </span>
       </div>
       <div className={styles.orderTitleAndStatus}>

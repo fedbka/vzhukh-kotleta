@@ -11,14 +11,13 @@ const Orders = ({ showStatus = false, reverse = false }) => {
   return (
     <div className={styles.component}>
       <ul className={styles.ordersList}>
-        {items &&
-          items.map((order, index) => (
-            <li className={styles.order} key={index}>
-              <Link to={`${order.number}`} state={{ background: location, state: order }} className={styles.link}>
-                <Order order={order} showStatus={showStatus} />
-              </Link>
-            </li>
-          ))}
+        {items?.map((order, index) => (
+          <li className={styles.order} key={index}>
+            <Link to={`${order.number}`} state={{ background: location, state: order }} className={styles.link}>
+              <Order order={order} showStatus={showStatus} />
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   );

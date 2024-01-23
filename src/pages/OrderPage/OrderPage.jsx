@@ -5,7 +5,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { getIngridients } from "../../services/actions/ingridients";
 import { getOrdersRequest } from "../../services/actions/orders";
 import { feedEndpoint, orderHistoryEndpoint } from "../../services/endpoints";
-import { getNormalizedOrderData } from "../../services/orders-proccessing";
+import { getNormalizedOrderData, getOrderTimeZoneText } from "../../services/orders-proccessing";
 import styles from "./OrderPage.module.css";
 
 const OrderPage = () => {
@@ -22,7 +22,7 @@ const OrderPage = () => {
   const order = location.state?.order || orders?.items.find((element) => element.number === parseInt(orderNumber));
   const orderStatus = order?.status === "created" ? "Создан" : order?.status === "pending" ? "Готовится" : "Выполнен";
   const orderTime = new Date(order?.updatedAt);
-  const timeZone = orderTime?.getTimezoneOffset() / 60;
+  const timeZone = getOrderTimeZoneText(order?.updatedAt);
 
   useEffect(() => {
     if (!ingredients.itemsLoaded && !ingredients.isFetching) dispatch(getIngridients());
@@ -73,7 +73,7 @@ const OrderPage = () => {
             <div className={styles.orderTimeAndPrice}>
               <span className={styles.orderTime}>
                 <FormattedDate date={orderTime} />
-                {" i-GMT" + timeZone}
+                {timeZone}
               </span>
               <span className={styles.orderPrice}>
                 {orderPrice}

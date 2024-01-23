@@ -14,7 +14,13 @@ export const getOrderStatusText = (status) => {
     case "created": return "Создан";
     case "pending": return "Готовится";
     case "canceled": return "Отменен";
-    case "done" : return "Выполнен"
+    case "done": return "Выполнен"
     default: return status;
+  }
 }
+
+export const getOrderTimeZoneText = (time) => {
+  const orderTime = new Date(time);
+  const timeZone = orderTime?.getTimezoneOffset() / 60;
+  return  " i-GMT" + (timeZone > 0 ? "+" : "") + timeZone;
 }
