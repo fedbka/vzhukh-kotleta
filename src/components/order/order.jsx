@@ -1,21 +1,23 @@
 import { CurrencyIcon, FormattedDate } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { getNomalizedOrderData } from "../../services/orders-proccessing";
+import { getNormalizedOrderData, getOrderStatusText } from "../../services/orders-proccessing";
 import styles from "./order.module.css";
 
 const Order = ({ order, showStatus = false }) => {
   const ingredients = useSelector((store) => store.ingridients);
   const orderTime = new Date(order.updatedAt);
   const timeZone = orderTime.getTimezoneOffset() / 60;
-  const orderStatus = order.status === "created" ? "Создан" : order.status === "pending" ? "Готовится" : "Выполнен";
+  const orderStatus = getOrderStatusText(order.status);
+
   const { orderPrice, orderIngredientsCount } = useMemo(
     () =>
       order && ingredients.itemsLoaded
-        ? getNomalizedOrderData(order, ingredients.items)
+        ? getNormalizedOrderData(order, ingredients.items)
         : { orderPrice: 0, orderIngredientsCount: [] },
     [order, ingredients.itemsLoaded, ingredients.items]
   );
+
   return (
     <div className={styles.component}>
       <div className={styles.orderInfo}>
@@ -37,12 +39,16 @@ const Order = ({ order, showStatus = false }) => {
             <li key={orderIngredientsCount[5]._id + order.number}>
               <div className={styles.orderIngridientImageThumbnail}>
                 <img
-                  className={`${styles.orderIngridientImage} ${orderIngredientsCount.length > 6 && styles.orderIngridientImageLast}`}
+                  className={`${styles.orderIngridientImage} ${
+                    orderIngredientsCount.length > 6 && styles.orderIngridientImageLast
+                  }`}
                   src={orderIngredientsCount[5][0].image}
                   alt={orderIngredientsCount[5][0].name}
                   title={orderIngredientsCount[5][0].name}
                 ></img>
-                {orderIngredientsCount.length > 6 && (<div className={styles.orderIngridientImageCaption}>+{orderIngredientsCount.length - 6}</div>)}
+                {orderIngredientsCount.length > 6 && (
+                  <div className={styles.orderIngridientImageCaption}>+{orderIngredientsCount.length - 6}</div>
+                )}
               </div>
             </li>
           )}
