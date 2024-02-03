@@ -5,7 +5,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { getIngridients } from "../../services/actions/ingridients";
 import { getOrdersRequest } from "../../services/actions/orders";
 import { feedEndpoint, orderHistoryEndpoint } from "../../services/endpoints";
-import { getNormalizedOrderData, getOrderTimeZoneText } from "../../services/orders-proccessing";
+import { getOrderNormalizedData, getOrderTimeZoneText } from "../../services/orders-proccessing";
 import styles from "./OrderPage.module.css";
 
 const OrderPage = () => {
@@ -32,7 +32,7 @@ const OrderPage = () => {
   const { orderPrice, orderIngredientsCount } = useMemo(
     () =>
       order && ingredients.itemsLoaded
-        ? getNormalizedOrderData(order, ingredients.items)
+        ? getOrderNormalizedData(order, ingredients.items)
         : { orderPrice: 0, orderIngredientsCount: [] },
     [order, ingredients.itemsLoaded, ingredients.items]
   );

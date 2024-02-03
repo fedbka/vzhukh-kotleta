@@ -1,7 +1,7 @@
 import { CurrencyIcon, FormattedDate } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { getNormalizedOrderData, getOrderStatusText, getOrderTimeZoneText } from "../../services/orders-proccessing";
+import { getOrderNormalizedData, getOrderStatusText, getOrderTimeZoneText } from "../../services/orders-proccessing";
 import styles from "./order.module.css";
 
 const Order = ({ order, showStatus = false }) => {
@@ -13,7 +13,7 @@ const Order = ({ order, showStatus = false }) => {
   const { orderPrice, orderIngredientsCount } = useMemo(
     () =>
       order && ingredients.itemsLoaded
-        ? getNormalizedOrderData(order, ingredients.items)
+        ? getOrderNormalizedData(order, ingredients.items)
         : { orderPrice: 0, orderIngredientsCount: [] },
     [order, ingredients.itemsLoaded, ingredients.items]
   );
