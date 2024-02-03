@@ -8,11 +8,7 @@ const NavigationLink = ({ Icon, text = "", link = "/" }) => {
       {({ isActive }) => (
         <>
           <Icon type={isActive ? "primary" : "secondary"} />
-          <p
-            className={isActive ? styles.text : styles.textInactive}
-          >
-            {text}
-          </p>
+          <p className={isActive ? styles.text : styles.textInactive}>{text}</p>
         </>
       )}
     </NavLink>

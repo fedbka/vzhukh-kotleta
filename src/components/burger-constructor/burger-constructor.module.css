@@ -17,19 +17,15 @@
   list-style: none;
   overflow-y: scroll;
   height: 40vh;
-}
-
-.filling_ingridients::-webkit-scrollbar {
-  width: 8px;
-}
-
-.filling_ingridients::-webkit-scrollbar-thumb {
-  background-color: #8585ad;
+  overflow: auto;
+  scrollbar-gutter: stable; 
+  composes: custom-scroll from global;  
 }
 
 .filling_ingridients_item {
   display: flex;
   flex-direction: row;
+  padding-right: 10px;
   gap: 10px;
   justify-content: flex-start;
   align-items: center;
@@ -54,9 +50,10 @@
 }
 
 .constructorElementTop {
-  composes: ml-1 mt-25 mb-4 from global;
+  min-height: 80px;
+  composes: ml-3 mt-0 mb-4 from global;
 }
 
 .constructorElementBottom {
-  composes: ml-1 mt-4 mb-4 from global;
+  composes: ml-3 mt-4 mb-4 from global;
 }

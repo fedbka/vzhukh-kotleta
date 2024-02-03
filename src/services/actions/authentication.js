@@ -1,4 +1,5 @@
 import Api from "../api";
+import { eraseTokens, getTokens, setTokens } from "../tokens";
 
 export const REGISTER_USER_REQUEST = "REGISTER_USER_REQUEST";
 export const registerUserRequest = () => ({
@@ -97,7 +98,7 @@ export const updateUserProfileSuccess = () => ({
   type: UPDATE_USER_PROFILE_SUCCESS,
 });
 
-export const UPDATE_USER_PROFILE_FAILED = "UPDATE_USER_PROFILE_SUCCESS";
+export const UPDATE_USER_PROFILE_FAILED = "UPDATE_USER_PROFILE_FAILED";
 export const updateUserProfileFailed = () => ({
   type: UPDATE_USER_PROFILE_FAILED,
 });
@@ -134,7 +135,6 @@ export const loginUser = ({ email, password }) => {
         dispatch(resetUserProfile());
       });
   }
-
 }
 
 export const logoutUser = () => {
@@ -154,7 +154,6 @@ export const logoutUser = () => {
         eraseTokens();
       });
   }
-
 }
 
 export const passwordRecovery = ({ email }) => {
@@ -167,7 +166,6 @@ export const passwordRecovery = ({ email }) => {
         dispatch(passwordRecoveryFailed());
       });
   }
-
 }
 
 export const passwordReset = ({ password, token }) => {
@@ -180,7 +178,6 @@ export const passwordReset = ({ password, token }) => {
         dispatch(passwordResetFailed());
       });
   }
-
 }
 
 export const autoLoginUser = () => {
@@ -230,21 +227,8 @@ export const updateUserProfile = (userProfile) => {
     if (!accessToken || !refreshToken) return Promise.reject({ success: false, message: "You are not authorized" });
 
     return Api.updateUserProfile(userProfile, accessToken, refreshToken, setTokens)
-      .then((res) =>  dispatch(setUserProfile(res.user)))
+      .then((res) => dispatch(setUserProfile(res.user)))
       .catch((err) => console.log(err));
   }
 }
 
-export const getTokens = () => {
-  return {
-    accessToken: localStorage.getItem('accessToken'),
-    refreshToken: localStorage.getItem('refreshToken'),
-  }
-}
-
-export const setTokens = ({ accessToken, refreshToken }) => {
-  accessToken ? localStorage.setItem("accessToken", accessToken) : localStorage.removeItem("accessToken");
-  refreshToken ? localStorage.setItem("refreshToken", refreshToken) : localStorage.removeItem("refreshToken");
-}
-
-export const eraseTokens = () => setTokens({ accessToken: '', refreshToken: '' });

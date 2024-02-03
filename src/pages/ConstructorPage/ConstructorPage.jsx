@@ -7,10 +7,13 @@ import styles from "./ConstructorPage.module.css";
 const ConstructorPage = () => {
   return (
     <main className={styles.page}>
-      <DndProvider backend={HTML5Backend}>
-        <BurgerIngredients />
-        <BurgerConstructor />
-      </DndProvider>
+      <h1 className={styles.title}>Соберите бургер</h1>
+      <div className={styles.content}>
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients />
+          <BurgerConstructor />
+        </DndProvider>
+      </div>
     </main>
   );
 };

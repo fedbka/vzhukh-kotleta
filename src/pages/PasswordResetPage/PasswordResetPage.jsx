@@ -19,16 +19,15 @@ const PasswordResetPage = () => {
 
   const onSubmitFormHandler = (event) => {
     event.preventDefault();
-    dispatch(passwordReset(formData))
-      .then(() => navigate('/login'));    
-  }
+    dispatch(passwordReset(formData)).then(() => navigate("/login"));
+  };
 
   const passwordResetCodeSent = useSelector((store) => store.authentication.passwordResetCodeSent);
-  
+
   return (
     <main className={styles.page}>
-      {!passwordResetCodeSent && <Navigate to='/forgot-password' />}
-      <h1 className="pt-0 pb-0 text text_type_main-large">Восстановление пароля</h1>
+      {!passwordResetCodeSent && <Navigate to="/forgot-password" />}
+      <h1 className={styles.title}>Восстановление пароля</h1>
       <form className={styles.form} onSubmit={onSubmitFormHandler}>
         <PasswordInput
           name="password"
@@ -47,9 +46,9 @@ const PasswordResetPage = () => {
         </Button>
       </form>
       <div className={styles.additionalActions}>
-        <p className="text text_type_main-default">
-          <span className="text_color_inactive">Вспомнили пароль?</span>
-          <Link to="/login" className={`pl-2 text_color_accent ${styles.link}`}>
+        <p className={styles.additionalAction}>
+          Вспомнили пароль?
+          <Link to="/login" className={styles.link}>
             Войти
           </Link>
         </p>

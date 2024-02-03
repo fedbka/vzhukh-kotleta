@@ -10,11 +10,12 @@ import PasswordRecoveryPage from "../../pages/PasswordRecoveryPage/PasswordRecov
 import PasswordResetPage from "../../pages/PasswordResetPage/PasswordResetPage";
 import ProfilePage from "../../pages/ProfilePage/ProfilePage";
 import RegistrationPage from "../../pages/RegistrationPage/RegistrationPage";
-import { autoLoginUser, getUserProfile } from "../../services/actions/authentication";
+import { autoLoginUser } from "../../services/actions/authentication";
 import AppHeader from "../app-header/app-header";
 import IngridientDetails from "../ingridient-details/ingridients-details";
 import Modal from "../modal/modal";
 import ProtectedRoute from "../protected-route/protected-route";
+import OrderPage from "../../pages/OrderPage/OrderPage";
 
 const App = () => {
   const navigate = useNavigate();
@@ -22,10 +23,11 @@ const App = () => {
   const background = location.state && location.state.background;
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(autoLoginUser())
-    .catch((err) => {});
-  }, [dispatch]);
+  const userLogin = () => {
+    dispatch(autoLoginUser()).catch((err) => {});
+  };
+
+  useEffect(userLogin, [dispatch]);
 
   const onCloseHandler = useCallback(() => navigate(-1), [navigate]);
 
@@ -34,14 +36,65 @@ const App = () => {
       <AppHeader />
       <Routes location={background || location}>
         <Route path="/" element={<ConstructorPage />} />
-        <Route path="/feed" element={<ProtectedRoute anonymous={false}><FeedPage /></ProtectedRoute> } />
-        <Route path="/profile" element={<ProtectedRoute anonymous={false}><ProfilePage /></ProtectedRoute> } />
-        <Route path="/profile/orders" element={<ProtectedRoute anonymous={false}><OrdersHistoryPage /></ProtectedRoute> } />
+        <Route path="/feed" element={<FeedPage />} />
+        <Route path='/feed/:orderNumber' element={<OrderPage />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute anonymous={false}>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/orders"
+          element={
+            <ProtectedRoute anonymous={false}>
+              <OrdersHistoryPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/orders/:orderNumber"
+          element={
+            <ProtectedRoute anonymous={false}>
+              <OrderPage />
+            </ProtectedRoute>
+          }
+        />        
         <Route path="/logout" element={<LogoutPage />} />
-        <Route path="/login" element={<ProtectedRoute anonymous={true}><LoginPage /></ProtectedRoute> } />
-        <Route path="/register" element={<ProtectedRoute anonymous={true}><RegistrationPage /></ProtectedRoute> } />
-        <Route path="/forgot-password" element={<ProtectedRoute anonymous={true}><PasswordRecoveryPage /></ProtectedRoute> } />
-        <Route path="/reset-password" element={<ProtectedRoute anonymous={true}><PasswordResetPage /></ProtectedRoute> } />
+        <Route
+          path="/login"
+          element={
+            <ProtectedRoute anonymous={true}>
+              <LoginPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <ProtectedRoute anonymous={true}>
+              <RegistrationPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <ProtectedRoute anonymous={true}>
+              <PasswordRecoveryPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={
+            <ProtectedRoute anonymous={true}>
+              <PasswordResetPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/ingridients/:id" element={<IngridientDetails />} />
       </Routes>
       {background && (
@@ -54,6 +107,22 @@ const App = () => {
               </Modal>
             }
           />
+          <Route
+            path="/feed/:orderNumber"
+            element={
+              <Modal handlerOnClose={onCloseHandler}>
+                <OrderPage />
+              </Modal>
+            }
+          />
+          <Route
+            path="/profile/orders/:orderNumber"
+            element={
+              <Modal handlerOnClose={onCloseHandler}>
+                <OrderPage />
+              </Modal>
+            }
+          />          
         </Routes>
       )}
     </div>

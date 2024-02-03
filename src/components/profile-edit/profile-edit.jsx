@@ -9,8 +9,6 @@ const ProfileEdit = () => {
   const userProfile = useSelector((state) => state.authentication.userProfile);
   const [formData, setformData] = useState({ ...userProfile, password: "" });
 
-  const resetChanges = useCallback(() => setformData({ ...userProfile, password: "" }), [userProfile]);
-
   useEffect(() => setformData({ ...userProfile, password: "" }), [setformData, userProfile]);
 
   const onChangeValuesHandler = useCallback(
@@ -30,6 +28,8 @@ const ProfileEdit = () => {
     },
     [dispatch, formData]
   );
+
+  const resetChanges = useCallback(() => setformData({ ...userProfile, password: "" }), [userProfile]);
 
   return (
     <div className={styles.main}>

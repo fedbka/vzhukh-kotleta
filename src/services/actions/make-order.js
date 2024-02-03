@@ -1,5 +1,5 @@
 import Api from "../api";
-import { getTokens } from "./authentication";
+import { getTokens } from "../tokens";
 import { clearChosenIngridients } from "./chosen-ingridients";
 import { resetIngridientQuantity } from "./ingridients";
 
@@ -23,17 +23,14 @@ export const makeOrderFailed = () => ({
 export function makeOrder(chosenIngridients) {
   return function (dispatch) {
     dispatch(makeOrderRequest());
-    const {accessToken} = getTokens();
+    const { accessToken } = getTokens();
     Api.makeOrder(chosenIngridients, accessToken)
       .then(res => {
-        if (res && res.success) {
-          dispatch(makeOrderSuccess({ description: res.name, number: res.order.number }));
-          dispatch(clearChosenIngridients());
-          dispatch(resetIngridientQuantity());
-        } else {
-          dispatch(makeOrderFailed());
-        }
-      }).catch(err => {
+        dispatch(makeOrderSuccess({ description: res.name, number: res.order.number }));
+        dispatch(clearChosenIngridients());
+        dispatch(resetIngridientQuantity());
+      })
+      .catch(err => {
         console.log(err);
         dispatch(makeOrderFailed())
       });

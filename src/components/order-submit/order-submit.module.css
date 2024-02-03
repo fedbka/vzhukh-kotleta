@@ -1,0 +1,32 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.order_number {
+  width: 100%;
+  min-width: 520px;
+  text-align: center;
+  composes: text text_type_digits-large mr-15 ml-15 mt-20 mb-4 from global;
+}
+
+.text {
+  width: 100%;
+  max-width: 520px;
+  text-align: center;
+  composes: text text_type_main-default from global;
+}
+
+.textConfirmation {
+  composes: text text_type_main-medium mt-4 from global;
+}
+
+.textInactive {
+  composes: text text_type_main-default text_color_inactive mb-20 from global;
+}
+
+.imageDone {
+  composes: mt-15 mb-15 from global;
+}

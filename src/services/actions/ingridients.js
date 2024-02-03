@@ -6,9 +6,9 @@ export const getIngridientsRequest = () => ({
 });
 
 export const GET_INGRIDIENTS_SUCCESS = 'GET_INGRIDIENTS_SUCCESS';
-export const getIngridientsSuccess = (ingridients) => ({
+export const getIngridientsSuccess = (payload) => ({
   type: GET_INGRIDIENTS_SUCCESS,
-  payload: ingridients,
+  payload: payload,
 });
 
 export const GET_INGRIDIENTS_FAILED = 'GET_INGRIDIENTS_FAILED';
@@ -42,7 +42,7 @@ export function getIngridients() {
     .then(res => dispatch(getIngridientsSuccess(res.data)))
     .catch(err => {
       console.log(err);
-      dispatch(getIngridientsFailed);
+      dispatch(getIngridientsFailed());
     });
   };
 }
