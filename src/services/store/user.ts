@@ -31,8 +31,8 @@ export const userSlice = createSlice({
       authApi.endpoints.getUser.matchFulfilled,
       (state, action) => {
         state.isAuthenticated = true;
-        state.name = action.payload.user?.name as string;
-        state.email = action.payload.user?.email as string;        
+        state.name = action.payload.user?.name ?? "";
+        state.email = action.payload.user?.email ?? "";        
       }
     );    
 
