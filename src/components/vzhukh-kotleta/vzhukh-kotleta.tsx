@@ -1,5 +1,6 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../hooks/store.ts';
 import { ConstructorPage } from '../../pages/constructor-page/constructor-page.tsx';
 import { FeedPage } from '../../pages/feed-page/feed-page.tsx';
 import { PasswordRecoveryPage } from '../../pages/forgot-password-page/forgot-password-page.tsx';
@@ -11,36 +12,39 @@ import { ProfilePage } from '../../pages/profile-page/profile-page.tsx';
 import { RegistrationPage } from '../../pages/registration-page/registration-page.tsx';
 import { PasswordResetPage } from '../../pages/reset-password-page/reset-password-page.tsx';
 import { useGetUserQuery, useRefreshTokenMutation } from '../../services/api/auth.ts';
+import { selectIsAuthenticated } from '../../services/store/user.ts';
 import { Header } from '../header/header.tsx';
 import { IngredientInfo } from '../ingredient-info/ingredient-info.tsx';
 import { Modal } from '../modal/modal.tsx';
 import { ProtectedRoute } from '../protected-route/protected-route.tsx';
 import './vzhukh-kotleta.module.css';
-import { useAppSelector } from '../../hooks/store.ts';
-import { selectIsAuthenticated } from '../../services/store/user.ts';
 
 const VzhukhKotleta = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const background = location.state?.background;
   const onCloseHandler = useCallback(() => navigate(-1), [navigate]);
+
+  const [tokenRefreshed, setTokenRefreshed] = useState<boolean>(false);
   const userIsAuthenticated = useAppSelector(state => selectIsAuthenticated(state));
-  const { refetch: getUserQUery, isError: userAuthIsError, isFetching: userAuthIsLoading, isSuccess: userAuthIsSuccess } = useGetUserQuery(null);
-  const [refreshToken, { isError: refreshTokenIsError, isLoading: refreshTokenIsLoading, isSuccess: refreshTokenIsSuccess }] = useRefreshTokenMutation();
+  const { refetch: refetchGetUserQuery, isError: userAuthIsError, isFetching: userAuthIsFetching, isSuccess: userAuthIsSuccess } = useGetUserQuery(null);
+
+  const [refreshToken, { isSuccess: refreshTokenIsSuccess }] = useRefreshTokenMutation();
+
+  useEffect(() => {
+    if (userIsAuthenticated || userAuthIsSuccess) return;
+
+    if (userAuthIsError && !tokenRefreshed) {
+      setTokenRefreshed(true);
+      refreshToken(null);
+    }
+  }, [userIsAuthenticated, userAuthIsSuccess, userAuthIsError, tokenRefreshed]);
 
   useEffect(() => {
     if (userAuthIsSuccess) return;
+    if (refreshTokenIsSuccess && !userAuthIsFetching) refetchGetUserQuery();
 
-    if (!userIsAuthenticated && !userAuthIsLoading && userAuthIsError && !refreshTokenIsError && !refreshTokenIsLoading && !refreshTokenIsSuccess) {
-      refreshToken(null);
-    }
-  }, [userIsAuthenticated, userAuthIsLoading, userAuthIsError, refreshTokenIsError, refreshTokenIsLoading]);
-
-  useEffect(()=> {
-    if (userAuthIsSuccess) return;
-    if ( refreshTokenIsSuccess && !userAuthIsLoading) getUserQUery();
-
-  }, [userAuthIsSuccess, refreshTokenIsSuccess, userAuthIsLoading]);
+  }, [userIsAuthenticated, userAuthIsSuccess, refreshTokenIsSuccess, userAuthIsFetching]);
 
   return (
     <>
