@@ -8,16 +8,10 @@ import { userSlice } from "./user.ts";
 import { TSocketMiddlewareOptions } from "../../types/types.ts";
 
 const feedOrdersSocketOptions: TSocketMiddlewareOptions = {
-  connectActionType: "orders/getFeedOrders",
-  disconnectActionType: "orders/clearFeedOrders",
-  inboundMessageActionType: "orders/loadFeedOrders",
-}
-
-const userOrdersFeedSocketOptions: TSocketMiddlewareOptions = {
-  connectActionType: "orders/getUserOrders",
-  disconnectActionType: "orders/clearUserOrders",
-  inboundMessageActionType: "orders/loadUsersOrders",
-}
+  connectActionType: "orders/getOrders",
+  disconnectActionType: "orders/clearOrders",
+  inboundMessageActionType: "orders/loadOrders",
+};
 
 export const store = configureStore({
   reducer: {
@@ -31,7 +25,6 @@ export const store = configureStore({
     getDefaultMiddleware().concat([
       api.middleware,
       socketMiddleware(feedOrdersSocketOptions),
-      socketMiddleware(userOrdersFeedSocketOptions),
     ]),
 });
 

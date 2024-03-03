@@ -1,9 +1,11 @@
 import {
+  TGetUserResponce,
   TLoginUserRequest,
   TLoginUserResponse,
   TLogoutUserResponse,
   TRecoveryPasswordRequest,
   TRecoveryPasswordResponse,
+  TRefreshTokenResponce,
   TRegisterUserRequest,
   TRegisterUserResponse,
   TResetPasswordRequest,
@@ -67,6 +69,27 @@ export const authApi = api.injectEndpoints({
         };
       },
     }),
+    refreshToken: build.mutation<TRefreshTokenResponce, unknown>({
+      query: () => {
+        const { refreshToken } = getTokens();
+        return {
+          url: "auth/token",
+          method: "POST",
+          body: { token: refreshToken },
+        };
+      },
+    }),
+    getUser: build.query<TGetUserResponce, unknown>({
+      query: () => {
+        const { accessToken } = getTokens();
+        return {
+          url: "auth/user",
+          headers: {
+            Authorization: accessToken,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -76,4 +99,6 @@ export const {
   useRecoveryPasswordMutation,
   useLogoutUserMutation,
   useUpdateUserMutation,
+  useGetUserQuery,
+  useRefreshTokenMutation,
 } = authApi;

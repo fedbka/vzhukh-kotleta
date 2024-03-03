@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { ConstructorPage } from '../../pages/constructor-page/constructor-page.tsx';
 import { FeedPage } from '../../pages/feed-page/feed-page.tsx';
@@ -15,12 +15,24 @@ import { IngredientInfo } from '../ingredient-info/ingredient-info.tsx';
 import { Modal } from '../modal/modal.tsx';
 import { ProtectedRoute } from '../protected-route/protected-route.tsx';
 import './vzhukh-kotleta.module.css';
+import { useAppSelector } from '../../hooks/store.ts';
+import { getTokens } from '../../services/utils/tokens.ts';
+import { useGetUserQuery } from '../../services/api/auth.ts';
+import { selectIsAuthenticated } from '../../services/store/user.ts';
 
 const VzhukhKotleta = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const background = location.state?.background;
   const onCloseHandler = useCallback(() => navigate(-1), [navigate]);
+  const userIsAuthenticated = useAppSelector(state => selectIsAuthenticated(state));
+  const {isError,  } = useGetUserQuery(null);
+  
+/*   useEffect(() => {
+    if (userIsAuthenticated) return;
+    { accessToken } = getTokens;
+    if (accessToken) 
+  }, []); */
 
   return (
     <>

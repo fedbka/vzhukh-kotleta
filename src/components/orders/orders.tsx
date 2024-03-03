@@ -1,32 +1,24 @@
-import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks/store.ts";
+import { useAppSelector } from "../../hooks/store.ts";
 import { useGetIngredientsQuery } from "../../services/api/ingredients.ts";
-import { getFeedOrders, selectFeedOrders, selectFeedOrdersIsSuccess } from "../../services/store/orders.ts";
-import { orderHistoryEndpoint } from "../../services/utils/endpoints.ts";
+import { selectOrders, selectOrdersIsSuccess } from "../../services/store/orders.ts";
 import { Order } from "../order/order.tsx";
 import styles from "./orders.module.css";
 
 export const Orders = ({ showStatus = false, reverse = false }: { showStatus?: boolean; reverse?: boolean; }) => {
-  const feedOrders = useAppSelector(state => selectFeedOrders(state));
-  const dispatch = useAppDispatch();
+  const [...orders] = useAppSelector(state => selectOrders(state));
   const location = useLocation();
-  const feedOrdersIsSuccess = useAppSelector(state => selectFeedOrdersIsSuccess(state));
+  const ordersIsSuccessLoaded = useAppSelector(state => selectOrdersIsSuccess(state));
   const { isSuccess: ingredientsIsSuccess } = useGetIngredientsQuery();
 
-  useEffect(() => {
-    if (!feedOrdersIsSuccess) {
-      const endpoint = orderHistoryEndpoint();
-      dispatch(getFeedOrders(endpoint));
-    }
-  }, [dispatch, feedOrdersIsSuccess]);
+  reverse && ordersIsSuccessLoaded && orders?.reverse();
 
   return (
     <div className={styles.component}>
-      {(!ingredientsIsSuccess || !feedOrdersIsSuccess) && <p className={styles.title}>Загружаем данные...</p>}
-      {ingredientsIsSuccess && feedOrdersIsSuccess && (
+      {(!ingredientsIsSuccess || !ordersIsSuccessLoaded) && <p className={styles.title}>Загружаем данные...</p>}
+      {ingredientsIsSuccess && ordersIsSuccessLoaded && (
         <ul className={styles.ordersList}>
-          {feedOrders?.map((order, index) => (
+          {orders?.map((order, index) => (
             <li className={styles.order} key={index}>
               <Link to={`${order.number}`} state={{ background: location, state: order }} className={styles.link}>
                 <Order order={order} showStatus={showStatus} />

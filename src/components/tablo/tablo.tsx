@@ -1,20 +1,12 @@
+import { useAppSelector } from "../../hooks/store.ts";
+import { selectOrders, selectOrdersQuantityForAllTime, selectOrdersQuantityForToday } from "../../services/store/orders.ts";
 import styles from "./tablo.module.css";
-import { useAppDispatch, useAppSelector } from "../../hooks/store.ts";
-import { getFeedOrders, selectFeedOrders, selectFeedOrdersIsSuccess, selectOrdersQuantityForAllTime, selectOrdersQuantityForToday } from "../../services/store/orders.ts";
-import { useEffect } from "react";
-import { feedEndpoint } from "../../services/utils/endpoints.ts";
 
-const Tablo = () => {
-  const dispatch = useAppDispatch();
-  const feedOrdersIsSuccess = useAppSelector(state => selectFeedOrdersIsSuccess(state));
-  const orders = useAppSelector(state => selectFeedOrders(state));
+export const Tablo = () => {
+
+  const orders = useAppSelector(state => selectOrders(state));
   const ordersQuantityForAllTime = useAppSelector(state => selectOrdersQuantityForAllTime(state));
   const ordersQuantityForToday = useAppSelector(state => selectOrdersQuantityForToday(state));
-  const endpoint = feedEndpoint();
-
-  useEffect(() => {
-    if (!feedOrdersIsSuccess) dispatch(getFeedOrders(endpoint));
-  }, [dispatch, feedOrdersIsSuccess, endpoint])
 
   const numbersOfOrdersDoned = orders.filter((order) => order.status === "done").slice(0, 20).map(element => element.number);
   const numbersOfOrdersInWork = orders.filter((order) => order.status === "pending").slice(0, 20).map(element => element.number);
@@ -50,5 +42,3 @@ const Tablo = () => {
     </div>
   );
 };
-
-export default Tablo;

@@ -1,14 +1,15 @@
-import { Middleware, PayloadAction, UnknownAction } from "@reduxjs/toolkit";
+import { Middleware, MiddlewareAPI, PayloadAction, UnknownAction } from "@reduxjs/toolkit";
 import { TSocketMiddlewareOptions } from "../../types/types.ts";
+import { AppDispatch, RootState } from "../store/store.ts";
 
 export function socketMiddleware(
   socketActions: TSocketMiddlewareOptions
 ): Middleware {
-  return (store) => {
+
+  return (store: MiddlewareAPI<AppDispatch, RootState>) => {
     let socket: WebSocket | null = null;
 
     return (next) => (action: UnknownAction | unknown) => {
-      console.log(action);
       const { dispatch } = store;
       const { type, payload } = action as PayloadAction<unknown>;
       const { connectActionType, disconnectActionType, inboundMessageActionType } = socketActions;

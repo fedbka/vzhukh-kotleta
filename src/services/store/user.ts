@@ -17,6 +17,26 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(
+      authApi.endpoints.refreshToken.matchFulfilled,
+      (state, action) => {
+        state.isAuthenticated = true;
+        setTokens({
+          accessToken: action.payload.accessToken,
+          refreshToken: action.payload.refreshToken,
+        });
+      }
+    );
+
+    builder.addMatcher(
+      authApi.endpoints.getUser.matchFulfilled,
+      (state, action) => {
+        state.isAuthenticated = true;
+        state.name = action.payload.user?.name as string;
+        state.email = action.payload.user?.email as string;        
+      }
+    );    
+
+    builder.addMatcher(
       authApi.endpoints.loginUser.matchFulfilled,
       (state, action) => {
         state.name = action.payload.user?.name ?? "";
@@ -29,13 +49,11 @@ export const userSlice = createSlice({
       }
     );
 
-    builder.addMatcher(
-      authApi.endpoints.logoutUser.matchFulfilled, 
-      (state) => {
-        state.name = "";
-        state.email = "";
-        state.isAuthenticated = false;
-        eraseTokens();
+    builder.addMatcher(authApi.endpoints.logoutUser.matchFulfilled, (state) => {
+      state.name = "";
+      state.email = "";
+      state.isAuthenticated = false;
+      eraseTokens();
     });
 
     builder.addMatcher(

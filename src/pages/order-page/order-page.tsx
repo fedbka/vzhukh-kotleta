@@ -4,10 +4,9 @@ import { useLocation, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/store.ts";
 import { useGetIngredientsQuery } from "../../services/api/ingredients.ts";
 import { selectIngredients } from "../../services/store/ingredients.ts";
-import { getFeedOrders, selectFeedOrders, selectFeedOrdersIsSuccess } from "../../services/store/orders.ts";
+import { getOrders, selectOrders, selectOrdersIsLoading, selectOrdersIsSuccess } from "../../services/store/orders.ts";
 import { feedEndpoint, orderHistoryEndpoint } from "../../services/utils/endpoints.ts";
 import { getOrderNormalizedData, getOrderTimeZoneText } from "../../services/utils/orders-proccessing.ts";
-import { TIngredient, TOrder } from "../../types/types.ts";
 import styles from "./order-page.module.css";
 
 export const OrderPage = () => {
@@ -16,24 +15,26 @@ export const OrderPage = () => {
   const background = location.state && location.state.background;
   const { orderNumber } = useParams();
 
-  const orders = useAppSelector((state) => selectFeedOrders(state));
+  const orders = useAppSelector((state) => selectOrders(state));
   const ingredients = useAppSelector(state => selectIngredients(state));
 
   const { isSuccess: ingredinentIsSuccess, isError: ingredientsIsError } = useGetIngredientsQuery();
-  const feedOrdersIsSuccess = useAppSelector(state => selectFeedOrdersIsSuccess(state));
+  const ordersIsSuccessLoaded = useAppSelector(state => selectOrdersIsSuccess(state));
+  const ordersIsLoading = useAppSelector(state => selectOrdersIsLoading(state));
 
-  const isNecessaryLoaded = feedOrdersIsSuccess && ingredinentIsSuccess;
+
+  const isNecessaryLoaded = ordersIsSuccessLoaded && ingredinentIsSuccess;
   const isError = ingredientsIsError;
   const endpoint = location.pathname.includes("feed") ? feedEndpoint() : orderHistoryEndpoint();
 
-  const order = location.state?.order || orders?.find((element: TOrder) => element.number === parseInt(orderNumber as string));
+  const order = location.state?.order || orders?.find((element) => element.number === parseInt(orderNumber as string));
   const orderStatus = order?.status === "created" ? "Создан" : order?.status === "pending" ? "Готовится" : "Выполнен";
   const orderTime = new Date(order?.updatedAt);
   const timeZone = getOrderTimeZoneText(order?.updatedAt);
 
   useEffect(() => {
-    if (!feedOrdersIsSuccess) dispatch(getFeedOrders(endpoint));
-  }, [dispatch]);
+    if (!ordersIsSuccessLoaded && !ordersIsLoading) dispatch(getOrders(endpoint));
+  }, [dispatch, ordersIsSuccessLoaded, ordersIsLoading, endpoint]);
 
   const { orderPrice, orderIngredientsCount } = useMemo(
     () =>

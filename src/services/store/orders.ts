@@ -4,12 +4,10 @@ import { ordersApi } from "../api/orders.ts";
 
 const initialState: TOrdersState = {
   orderConfirmation: {},
-  feedOrders: [],
-  feedOrdersIsSuccess: false,
-  feedOrdersIsError: false,
-  userOrders: [],
-  userOrdersIsSuccess: false,
-  userOrdersIsError: false,
+  orders: [],
+  ordersIsLoading: false,
+  ordersIsSuccess: false,
+  ordersIsError: false,
   ordersQuantityForAllTime: 0,
   ordersQuantityForToday: 0,
 };
@@ -18,12 +16,13 @@ export const ordersSlice = createSlice({
   name: "orders",
   initialState,
   reducers: {
-    getFeedOrders: (state, action: PayloadAction<string>) => {
-      state.feedOrders = initialState.feedOrders;
-      state.feedOrdersIsSuccess = initialState.feedOrdersIsSuccess;
-      state.feedOrdersIsError = initialState.feedOrdersIsError;
+    getOrders: (state, action: PayloadAction<string>) => {
+      state.orders = initialState.orders;
+      state.ordersIsLoading = true;
+      state.ordersIsSuccess = initialState.ordersIsSuccess;
+      state.ordersIsError = initialState.ordersIsError;
     },
-    loadFeedOrders: (
+    loadOrders: (
       state,
       action: PayloadAction<{
         orders: TOrders;
@@ -31,15 +30,19 @@ export const ordersSlice = createSlice({
         totalToday: number;
       }>
     ) => {
-      state.feedOrders = [...action.payload.orders];
-      state.feedOrdersIsSuccess = true;
+      state.orders = [...action.payload.orders];
+      state.ordersIsLoading = false;
+      state.ordersIsSuccess = true;
       state.ordersQuantityForToday = action.payload.totalToday;
       state.ordersQuantityForAllTime = action.payload.total;
     },
-    clearFeedOrders: (state) => {
-      state.feedOrders = initialState.feedOrders;
-      state.feedOrdersIsSuccess = initialState.feedOrdersIsSuccess;
-      state.feedOrdersIsError = initialState.feedOrdersIsError;
+    clearOrders: (state) => {
+      state.orders = initialState.orders;
+      state.ordersIsLoading = initialState.ordersIsLoading;
+      state.ordersIsSuccess = initialState.ordersIsSuccess;
+      state.ordersIsError = initialState.ordersIsError;
+      state.ordersQuantityForAllTime = initialState.ordersQuantityForAllTime;
+      state.ordersQuantityForToday = initialState.ordersQuantityForAllTime;
     },
   },
   extraReducers: (builder) => {
@@ -53,26 +56,25 @@ export const ordersSlice = createSlice({
   selectors: {
     selectOrderConfirmationNumber: (state) => state.orderConfirmation.number,
     selectOrderConfirmationName: (state) => state.orderConfirmation.name,
-    selectFeedOrders: (state) => state.feedOrders,
-    selectUserOrders: (state) => state.userOrders,
-    selectFeedOrdersIsSuccess: (state) => state.feedOrdersIsSuccess,
+    selectOrders: (state) => state.orders,
+    selectOrdersIsLoading: (state) => state.ordersIsLoading,
+    selectOrdersIsSuccess: (state) => state.ordersIsSuccess,
     selectOrdersQuantityForToday: (state) => state.ordersQuantityForToday,
     selectOrdersQuantityForAllTime: (state) => state.ordersQuantityForAllTime,
   },
 });
 
 export const {
-  selectFeedOrders,
+  selectOrders,
   selectOrderConfirmationName,
   selectOrderConfirmationNumber,
-  selectUserOrders,
-  selectFeedOrdersIsSuccess,
+  selectOrdersIsSuccess,
+  selectOrdersIsLoading,
   selectOrdersQuantityForToday,
   selectOrdersQuantityForAllTime,
 } = ordersSlice.selectors;
 
-export const { getFeedOrders, clearFeedOrders, loadFeedOrders } =
-  ordersSlice.actions;
+export const { getOrders, clearOrders, loadOrders } = ordersSlice.actions;
 export const selectOrderConfirmation = createSelector(
   [
     ordersSlice.selectors.selectOrderConfirmationNumber,

@@ -121,19 +121,29 @@ export type TRegisterUserResponse = {
   refreshToken?: string;
 };
 
+export type TRefreshTokenResponce = {
+  success: boolean;
+  accessToken?: string;
+  refreshToken?: string;
+};
+
+export type TGetUserResponce = {
+  success: boolean;
+  user?: TUser;
+}
+
 export type TAuthState = {
   authenticated: boolean;
   user: TUser;
 };
 
+
+// orders
+
 export type TOrderOwner = TUser & {
   createdAt: string;
   updatedAt: string;
 };
-
-
-// orders
-
 export type TOrderStatus = "created" | "pending" | "canceled" | "done";
 
 export type TOrderConfirmation = {
@@ -165,26 +175,23 @@ export type TOrder = {
   number: number;
   status: TOrderStatus;
   updatedAt: string;
-  _id: string
-}
+  _id: string;
+};
 
 export type TOrders = TOrder[];
 
 export type TOrdersState = {
   orderConfirmation: TOrderConfirmation | Record<string, never>;
-  feedOrders: TOrders;
-  feedOrdersIsSuccess: boolean; 
-  feedOrdersIsError: boolean; 
-  userOrders: TOrders;
-  userOrdersIsSuccess: boolean; 
-  userOrdersIsError: boolean; 
+  orders: TOrders;
+  ordersIsLoading: boolean;
+  ordersIsSuccess: boolean;
+  ordersIsError: boolean;
   ordersQuantityForAllTime: number;
   ordersQuantityForToday: number;
 };
 
 export type TSocketMiddlewareOptions = {
-  connectActionType : string;
+  connectActionType: string;
   disconnectActionType: string;
   inboundMessageActionType: string;
-}
-
+};
