@@ -1,0 +1,22 @@
+.component {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 9px;
+    text-decoration: none;
+    color: var(--text-active-color);
+    composes: text text_type_main-default from global;
+}
+
+.component:hover {
+    opacity: 0.7;
+}
+
+.component_text {
+    composes: text text_type_main-default from global;
+}
+
+.component_text_type_inactive {
+    composes: text_color_inactive from global;
+}
