@@ -10,134 +10,129 @@ import { ProfileOrdersPage } from '../../pages/profile-orders-page/profile-order
 import { ProfilePage } from '../../pages/profile-page/profile-page.tsx';
 import { RegistrationPage } from '../../pages/registration-page/registration-page.tsx';
 import { PasswordResetPage } from '../../pages/reset-password-page/reset-password-page.tsx';
+import { useGetUserQuery, useRefreshTokenMutation } from '../../services/api/auth.ts';
 import { Header } from '../header/header.tsx';
 import { IngredientInfo } from '../ingredient-info/ingredient-info.tsx';
 import { Modal } from '../modal/modal.tsx';
 import { ProtectedRoute } from '../protected-route/protected-route.tsx';
 import './vzhukh-kotleta.module.css';
-import { useAppSelector } from '../../hooks/store.ts';
-import { getTokens } from '../../services/utils/tokens.ts';
-import { useGetUserQuery } from '../../services/api/auth.ts';
-import { selectIsAuthenticated } from '../../services/store/user.ts';
 
 const VzhukhKotleta = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const background = location.state?.background;
   const onCloseHandler = useCallback(() => navigate(-1), [navigate]);
-  const userIsAuthenticated = useAppSelector(state => selectIsAuthenticated(state));
-  const {isError,  } = useGetUserQuery(null);
-  
-/*   useEffect(() => {
-    if (userIsAuthenticated) return;
-    { accessToken } = getTokens;
-    if (accessToken) 
-  }, []); */
+  const { isError: userAuthError } = useGetUserQuery(null);
+  const [ refreshToken, { isError: refreshTokenIsError, isLoading: refreshTokenIsLoading } ] = useRefreshTokenMutation();
 
-  return (
-    <>
-      <Header />
-      <Routes location={background || location}>
-        <Route path="/feed" element={<FeedPage />} />
-        <Route path='/feed/:orderNumber' element={<OrderPage />} />
-        <Route path="/ingredients/:id" element={<IngredientInfo />} />
-        <Route path='/' element={<ConstructorPage />} />
+useEffect(() => {
+  if (userAuthError && !refreshTokenIsError && !refreshTokenIsLoading) refreshToken(null);
+}, [userAuthError, refreshTokenIsError, refreshTokenIsLoading, refreshToken]);
+
+return (
+  <>
+    <Header />
+    <Routes location={background || location}>
+      <Route path="/feed" element={<FeedPage />} />
+      <Route path='/feed/:orderNumber' element={<OrderPage />} />
+      <Route path="/ingredients/:id" element={<IngredientInfo />} />
+      <Route path='/' element={<ConstructorPage />} />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute anonymous={false}>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile/orders"
+        element={
+          <ProtectedRoute anonymous={false}>
+            <ProfileOrdersPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile/orders/:orderNumber"
+        element={
+          <ProtectedRoute anonymous={false}>
+            <OrderPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <ProtectedRoute anonymous={true}>
+            <RegistrationPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/forgot-password"
+        element={
+          <ProtectedRoute anonymous={true}>
+            <PasswordRecoveryPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reset-password"
+        element={
+          <ProtectedRoute anonymous={true}>
+            <PasswordResetPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          <ProtectedRoute anonymous={true}>
+            <LoginPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/logout"
+        element={
+          <ProtectedRoute anonymous={false}>
+            <LogoutPage />
+          </ProtectedRoute>
+        }
+      />
+
+    </Routes>
+    {background && (
+      <Routes>
         <Route
-          path="/profile"
+          path="/ingredients/:id"
           element={
-            <ProtectedRoute anonymous={false}>
-              <ProfilePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile/orders"
-          element={
-            <ProtectedRoute anonymous={false}>
-              <ProfileOrdersPage />
-            </ProtectedRoute>
+            <Modal onCloseHandler={onCloseHandler}>
+              <IngredientInfo />
+            </Modal>
           }
         />
         <Route
           path="/profile/orders/:orderNumber"
           element={
-            <ProtectedRoute anonymous={false}>
+            <Modal onCloseHandler={onCloseHandler}>
               <OrderPage />
-            </ProtectedRoute>
+            </Modal>
           }
         />
         <Route
-          path="/register"
+          path="/feed/:orderNumber"
           element={
-            <ProtectedRoute anonymous={true}>
-              <RegistrationPage />
-            </ProtectedRoute>
+            <Modal onCloseHandler={onCloseHandler}>
+              <OrderPage />
+            </Modal>
           }
         />
-        <Route
-          path="/forgot-password"
-          element={
-            <ProtectedRoute anonymous={true}>
-              <PasswordRecoveryPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/reset-password"
-          element={
-            <ProtectedRoute anonymous={true}>
-              <PasswordResetPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <ProtectedRoute anonymous={true}>
-              <LoginPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/logout"
-          element={
-            <ProtectedRoute anonymous={false}>
-              <LogoutPage />
-            </ProtectedRoute>
-          }
-        />
-
       </Routes>
-      {background && (
-        <Routes>
-          <Route
-            path="/ingredients/:id"
-            element={
-              <Modal onCloseHandler={onCloseHandler}>
-                <IngredientInfo />
-              </Modal>
-            }
-          />
-          <Route
-            path="/profile/orders/:orderNumber"
-            element={
-              <Modal onCloseHandler={onCloseHandler}>
-                <OrderPage />
-              </Modal>
-            }
-          />
-          <Route
-            path="/feed/:orderNumber"
-            element={
-              <Modal onCloseHandler={onCloseHandler}>
-                <OrderPage />
-              </Modal>
-            }
-          />
-        </Routes>
-      )}
-    </>
-  )
+    )}
+  </>
+)
 };
 
 export default VzhukhKotleta;
