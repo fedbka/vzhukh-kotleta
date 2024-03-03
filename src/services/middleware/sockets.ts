@@ -31,6 +31,10 @@ export function socketMiddleware(
           const { success, ...message } = parsedData;
           dispatch({ type: inboundMessageActionType, payload: message})
         };
+
+        socket.onerror = (event) => {
+          console.log(event);
+        }
       }
 
       next(action);
