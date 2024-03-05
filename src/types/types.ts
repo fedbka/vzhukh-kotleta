@@ -139,7 +139,6 @@ export type TAuthState = {
 
 
 // orders
-
 export type TOrderOwner = TUser & {
   createdAt: string;
   updatedAt: string;
@@ -179,6 +178,14 @@ export type TOrder = {
 };
 
 export type TOrders = TOrder[];
+
+export type TGetOrdersResponse = {
+  success: boolean;
+  orders?: TOrders;
+  total?: number;
+  totalToday?: number;
+  message?: string;
+}
 
 export type TOrdersState = {
   orderConfirmation: TOrderConfirmation | Record<string, never>;

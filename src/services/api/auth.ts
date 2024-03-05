@@ -18,8 +18,8 @@ import { api } from "./api.ts";
 
 export const authApi = api.injectEndpoints({
   endpoints: (build) => ({
-    loginUser: build.mutation<TLoginUserResponse, unknown>({
-      query: ({ email, password }: TLoginUserRequest) => ({
+    loginUser: build.mutation<TLoginUserResponse, TLoginUserRequest>({
+      query: ({ email, password }) => ({
         url: "auth/login",
         method: "POST",
         body: { email, password },
@@ -35,29 +35,35 @@ export const authApi = api.injectEndpoints({
         };
       },
     }),
-    resetPassword: build.mutation<TResetPasswordResponse, unknown>({
-      query: ({ email }: TResetPasswordRequest) => ({
+    resetPassword: build.mutation<
+      TResetPasswordResponse,
+      TResetPasswordRequest
+    >({
+      query: ({ email }) => ({
         url: "password-reset",
         method: "POST",
         body: { email },
       }),
     }),
-    recoveryPassword: build.mutation<TRecoveryPasswordResponse, unknown>({
-      query: ({ password, token }: TRecoveryPasswordRequest) => ({
+    recoveryPassword: build.mutation<
+      TRecoveryPasswordResponse,
+      TRecoveryPasswordRequest
+    >({
+      query: ({ password, token }) => ({
         url: "password-reset/reset",
         method: "POST",
         body: { password, token },
       }),
     }),
-    registerUser: build.mutation<TRegisterUserResponse, unknown>({
-      query: ({ email, name, password }: TRegisterUserRequest) => ({
+    registerUser: build.mutation<TRegisterUserResponse, TRegisterUserRequest>({
+      query: ({ email, name, password }) => ({
         url: "auth/register",
         method: "POST",
         body: { name, email, password },
       }),
     }),
-    updateUser: build.mutation<TUpdateUserResponse, unknown>({
-      query: ({ email, name, password }: TUpdateUserRequest) => {
+    updateUser: build.mutation<TUpdateUserResponse, TUpdateUserRequest>({
+      query: ({ email, name, password }) => {
         const { accessToken } = getTokens();
         return {
           url: "auth/user",

@@ -16,7 +16,7 @@ export const ordersSlice = createSlice({
   name: "orders",
   initialState,
   reducers: {
-    getOrders: (state, action: PayloadAction<string>) => {
+    getOrders: (state, action: TPayloadAction<string>) => {
       state.orders = initialState.orders;
       state.ordersIsLoading = true;
       state.ordersIsSuccess = initialState.ordersIsSuccess;
@@ -25,16 +25,24 @@ export const ordersSlice = createSlice({
     loadOrders: (
       state,
       action: PayloadAction<{
-        orders: TOrders;
-        total: number;
-        totalToday: number;
+        orders?: TOrders;
+        total?: number;
+        totalToday?: number;
+        success: boolean;
+        message?: string;
       }>
     ) => {
-      state.orders = [...action.payload.orders];
-      state.ordersIsLoading = false;
-      state.ordersIsSuccess = true;
-      state.ordersQuantityForToday = action.payload.totalToday;
-      state.ordersQuantityForAllTime = action.payload.total;
+      if (action.payload.success) {
+        state.orders = [...action.payload.orders ?? []];
+        state.ordersIsLoading = false;
+        state.ordersIsSuccess = true;
+        state.ordersQuantityForToday = action.payload.totalToday ?? 0;
+        state.ordersQuantityForAllTime = action.payload.total ?? 0;
+      }
+
+      if (!action.payload.success && action.payload.message === "Invalid or missing token") {
+        console.log("nen");
+      }
     },
     clearOrders: (state) => {
       state.orders = initialState.orders;
